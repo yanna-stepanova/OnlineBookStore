@@ -1,8 +1,8 @@
-package com.yanna.stepanova.dao.impl;
+package com.yanna.stepanova.repository.impl;
 
-import com.yanna.stepanova.dao.BookRepository;
 import com.yanna.stepanova.exception.DataProcessingException;
 import com.yanna.stepanova.model.Book;
+import com.yanna.stepanova.repository.BookRepository;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,8 +28,8 @@ public class BookRepositoryImpl implements BookRepository {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.persist(book);
+            book.setIsbn("ISBN_" + book.getId());
             transaction.commit();
-
             return book;
         } catch (Exception e) {
             if (transaction != null) {

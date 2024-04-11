@@ -1,7 +1,7 @@
 package com.yanna.stepanova.service.impl;
 
-import com.yanna.stepanova.dao.BookRepository;
 import com.yanna.stepanova.model.Book;
+import com.yanna.stepanova.repository.BookRepository;
 import com.yanna.stepanova.service.BookService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

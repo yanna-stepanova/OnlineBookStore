@@ -1,4 +1,4 @@
-package com.yanna.stepanova.dao;
+package com.yanna.stepanova.repository;
 
 import com.yanna.stepanova.model.Book;
 import java.util.List;
