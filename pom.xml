@@ -19,6 +19,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.5.5.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>2.2.224</version>
@@ -95,12 +100,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>3.3.1</version>
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-					<consoleOutput>true</consoleOutput>
-					<failsOnError>true</failsOnError>
-					<linkXRef>false</linkXRef>
-				</configuration>
 				<executions>
 					<execution>
 						<phase>compile</phase>
@@ -109,6 +108,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
+					<sourceDirectories>src</sourceDirectories>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

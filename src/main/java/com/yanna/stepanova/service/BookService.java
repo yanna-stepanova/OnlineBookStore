@@ -1,10 +1,11 @@
 package com.yanna.stepanova.service;
 
-import com.yanna.stepanova.model.Book;
+import com.yanna.stepanova.dto.BookDto;
+import com.yanna.stepanova.dto.CreateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List<Book> findAll();
+    List<BookDto> findAll();
 }

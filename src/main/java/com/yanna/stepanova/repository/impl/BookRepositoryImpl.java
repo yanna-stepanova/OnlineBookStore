@@ -1,55 +1,42 @@
 package com.yanna.stepanova.repository.impl;
 
-import com.yanna.stepanova.exception.DataProcessingException;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.repository.BookRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final EntityManagerFactory entityManagerFactory;
 
     @Override
     public Book save(Book book) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.persist(book);
-            book.setIsbn("ISBN_" + book.getId());
+        EntityTransaction transaction = null;
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            entityManager.persist(book);
             transaction.commit();
             return book;
-        } catch (Exception e) {
-            if (transaction != null) {
+        } catch (RuntimeException ex) {
+            if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't insert a book: " + book, e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            throw new RuntimeException("Can't insert the books: " + book, ex);
         }
     }
 
     @Override
     public List<Book> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Book> allBooks = session.createQuery("FROM Book", Book.class);
-            return allBooks.getResultList();
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("SELECT b FROM Book b", Book.class).getResultList();
         } catch (RuntimeException ex) {
-            throw new RuntimeException("Can't get all entities from table 'books'");
+            throw new RuntimeException("Can't get all entities from table 'books'", ex);
         }
     }
 }
