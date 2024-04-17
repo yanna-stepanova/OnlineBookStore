@@ -7,5 +7,9 @@ import java.util.List;
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
 
-    List<BookDto> findAll();
+    BookDto getBookById(Long id);
+
+    List<BookDto> getAllByAuthor(String author);
+
+    List<BookDto> getAll();
 }

@@ -2,13 +2,13 @@ package com.yanna.stepanova.service.impl;
 
 import com.yanna.stepanova.dto.BookDto;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
+import com.yanna.stepanova.exception.EntityNotFoundException;
 import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.repository.BookRepository;
 import com.yanna.stepanova.service.BookService;
 import java.util.List;
 import java.util.Random;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +17,45 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final BookMapper bookMapper;
-    private final Random randomIsbn = new Random(10_000_000_000_000L);
+    private final Random random = new Random();
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
-        book.setIsbn(String.valueOf(randomIsbn.longs()));
+        book.setIsbn(generateUniqueIsbn());
         return bookMapper.toDto(bookRepo.save(book));
     }
 
     @Override
-    public List<BookDto> findAll() {
-        return bookRepo.findAll().stream()
+    public BookDto getBookById(Long id) {
+        Book book = bookRepo.findBookById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't get book by id = " + id));
+        return bookMapper.toDto(book);
+    }
+
+    @Override
+    public List<BookDto> getAllByAuthor(String author) {
+        List<Book> books = bookRepo.findAllByAuthor(author).orElseThrow(
+                () -> new EntityNotFoundException("Can't get all books by author: " + author));
+        return books.stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public List<BookDto> getAll() {
+        List<Book> books = bookRepo.findAll().orElseThrow(
+                () -> new EntityNotFoundException("Can't get all books of table 'books'"));
+        return books.stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    private String generateUniqueIsbn() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < 13; i++) {
+            result.append(random.nextInt(10));
+        }
+        return result.toString();
     }
 }
