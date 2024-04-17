@@ -5,6 +5,7 @@ import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
 
