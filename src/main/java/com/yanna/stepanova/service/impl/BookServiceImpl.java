@@ -28,14 +28,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepo.findBookById(id).orElseThrow(
+        Book book = bookRepo.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't get book by id = " + id));
         return bookMapper.toDto(book);
     }
 
     @Override
     public List<BookDto> getAllByAuthor(String author) {
-        List<Book> books = bookRepo.findAllByAuthor(author).orElseThrow(
+        List<Book> books = bookRepo.findAllByAuthorContainsIgnoreCase(author).orElseThrow(
                 () -> new EntityNotFoundException("Can't get all books by author: " + author));
         return books.stream()
                 .map(bookMapper::toDto)
@@ -44,11 +44,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAll() {
-        List<Book> books = bookRepo.findAll().orElseThrow(
-                () -> new EntityNotFoundException("Can't get all books of table 'books'"));
+        List<Book> books = bookRepo.findAll();
         return books.stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepo.deleteById(id);
     }
 
     private String generateUniqueIsbn() {
