@@ -55,6 +55,19 @@ public class BookServiceImpl implements BookService {
         bookRepo.deleteById(id);
     }
 
+    @Override
+    public BookDto updateBookById(Long id, CreateBookRequestDto requestDto) {
+        Book updatedBook = bookRepo.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("There is no book by id = " + id));
+        Book newBook = bookMapper.toModel(requestDto);
+        updatedBook.setTitle(newBook.getTitle());
+        updatedBook.setAuthor(newBook.getAuthor());
+        updatedBook.setPrice(newBook.getPrice());
+        updatedBook.setDescription(newBook.getDescription());
+        updatedBook.setCoverImage(newBook.getCoverImage());
+        return bookMapper.toDto(bookRepo.save(updatedBook));
+    }
+
     private String generateUniqueIsbn() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 13; i++) {
