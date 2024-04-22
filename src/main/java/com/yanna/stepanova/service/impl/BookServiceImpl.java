@@ -5,10 +5,11 @@ import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.exception.EntityNotFoundException;
 import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
+import com.yanna.stepanova.model.MyRandom;
 import com.yanna.stepanova.repository.BookRepository;
 import com.yanna.stepanova.service.BookService;
+import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,12 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final BookMapper bookMapper;
-    private final Random random = new Random();
+    private final MyRandom myRandom;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
-        Book book = bookMapper.toModel(requestDto);
-        book.setIsbn(generateUniqueIsbn());
+        Book book = bookMapper.generateUniqueIsbn(bookMapper.toModel(requestDto),
+                myRandom.getRandom());
         return bookMapper.toDto(bookRepo.save(book));
     }
 
@@ -35,19 +36,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllByAuthor(String author) {
-        List<Book> books = bookRepo.findAllByAuthorContainsIgnoreCase(author).orElseThrow(
-                () -> new EntityNotFoundException("Can't get all books by author: " + author));
-        return books.stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookMapper.toDto(bookRepo.findAllByAuthorContainsIgnoreCase(author));
     }
 
     @Override
     public List<BookDto> getAll() {
-        List<Book> books = bookRepo.findAll();
-        return books.stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookMapper.toDto(bookRepo.findAll());
     }
 
     @Override
@@ -56,23 +50,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public BookDto updateBookById(Long id, CreateBookRequestDto requestDto) {
-        Book updatedBook = bookRepo.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("There is no book by id = " + id));
-        Book newBook = bookMapper.toModel(requestDto);
-        updatedBook.setTitle(newBook.getTitle());
-        updatedBook.setAuthor(newBook.getAuthor());
-        updatedBook.setPrice(newBook.getPrice());
-        updatedBook.setDescription(newBook.getDescription());
-        updatedBook.setCoverImage(newBook.getCoverImage());
-        return bookMapper.toDto(bookRepo.save(updatedBook));
+        Book updatedBook = bookMapper.updateBookFromRequestDto(
+                bookRepo.findById(id).orElseThrow(() ->
+                        new EntityNotFoundException("Can't get book by id = " + id)), requestDto);
+        return bookMapper.toDto(updatedBook);
     }
 
-    private String generateUniqueIsbn() {
+    /*private String generateUniqueIsbn() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 13; i++) {
             result.append(random.nextInt(10));
         }
         return result.toString();
-    }
+    }*/
 }
