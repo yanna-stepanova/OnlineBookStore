@@ -22,16 +22,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
-        Book book = bookMapper.generateUniqueIsbn(bookMapper.toModel(requestDto),
-                myRandom.getRandom());
+        Book book = bookMapper.toModel(requestDto);
+        book.setIsbn(generateUniqueIsbn());
         return bookMapper.toDto(bookRepo.save(book));
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepo.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't get book by id = " + id));
-        return bookMapper.toDto(book);
+        return bookRepo.findById(id)
+                .map(bookMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Book with id: %s not found", id)));
     }
 
     @Override
@@ -51,18 +52,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto updateBookById(Long id, CreateBookRequestDto requestDto) {
-        Book updatedBook = bookMapper.updateBookFromRequestDto(
+    public BookDto updateBook(Long id, CreateBookRequestDto requestDto) {
+        Book updatedBook = bookMapper.updateBookFromDto(
                 bookRepo.findById(id).orElseThrow(() ->
                         new EntityNotFoundException("Can't get book by id = " + id)), requestDto);
         return bookMapper.toDto(updatedBook);
     }
 
-    /*private String generateUniqueIsbn() {
+    private String generateUniqueIsbn() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 13; i++) {
-            result.append(random.nextInt(10));
+            result.append(myRandom.getRandom().nextInt(10));
         }
         return result.toString();
-    }*/
+    }
 }
