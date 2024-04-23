@@ -5,9 +5,11 @@ import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,5 +39,17 @@ public class BookController {
     @GetMapping
     public List<BookDto> getAll() {
         return bookService.getAll();
+    }
+
+    @PutMapping("/{id}")
+    public BookDto updateBookById(@PathVariable Long id,
+                                  @RequestBody CreateBookRequestDto newRequestDto) {
+        return bookService.updateBook(id, newRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+        bookService.deleteById(id);
+        return "The book entity was deleted by id: " + id;
     }
 }

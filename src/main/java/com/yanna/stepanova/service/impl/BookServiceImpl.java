@@ -7,6 +7,7 @@ import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.repository.BookRepository;
 import com.yanna.stepanova.service.BookService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final BookMapper bookMapper;
-    private final Random random = new Random();
+    private final Random myRandom;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -28,33 +29,40 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepo.findBookById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't get book by id = " + id));
-        return bookMapper.toDto(book);
+        return bookRepo.findById(id)
+                .map(bookMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Book with id: %s not found", id)));
     }
 
     @Override
     public List<BookDto> getAllByAuthor(String author) {
-        List<Book> books = bookRepo.findAllByAuthor(author).orElseThrow(
-                () -> new EntityNotFoundException("Can't get all books by author: " + author));
-        return books.stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookMapper.toDto(bookRepo.findAllByAuthorContainsIgnoreCase(author));
     }
 
     @Override
     public List<BookDto> getAll() {
-        List<Book> books = bookRepo.findAll().orElseThrow(
-                () -> new EntityNotFoundException("Can't get all books of table 'books'"));
-        return books.stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookMapper.toDto(bookRepo.findAll());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepo.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public BookDto updateBook(Long id, CreateBookRequestDto requestDto) {
+        Book updatedBook = bookMapper.updateBookFromDto(
+                bookRepo.findById(id).orElseThrow(() ->
+                        new EntityNotFoundException("Can't get book by id = " + id)), requestDto);
+        return bookMapper.toDto(updatedBook);
     }
 
     private String generateUniqueIsbn() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 13; i++) {
-            result.append(random.nextInt(10));
+            result.append(myRandom.nextInt(10));
         }
         return result.toString();
     }

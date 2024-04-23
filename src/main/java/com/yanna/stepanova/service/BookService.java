@@ -12,4 +12,8 @@ public interface BookService {
     List<BookDto> getAllByAuthor(String author);
 
     List<BookDto> getAll();
+
+    void deleteById(Long id);
+
+    BookDto updateBook(Long id, CreateBookRequestDto requestDto);
 }
