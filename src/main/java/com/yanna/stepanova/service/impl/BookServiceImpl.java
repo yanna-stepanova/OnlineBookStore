@@ -5,11 +5,11 @@ import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.exception.EntityNotFoundException;
 import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
-import com.yanna.stepanova.model.MyRandom;
 import com.yanna.stepanova.repository.BookRepository;
 import com.yanna.stepanova.service.BookService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final BookMapper bookMapper;
-    private final MyRandom myRandom;
+    private final Random myRandom;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
     private String generateUniqueIsbn() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 13; i++) {
-            result.append(myRandom.getRandom().nextInt(10));
+            result.append(myRandom.nextInt(10));
         }
         return result.toString();
     }
