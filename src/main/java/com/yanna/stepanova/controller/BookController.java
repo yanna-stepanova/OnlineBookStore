@@ -1,6 +1,7 @@
 package com.yanna.stepanova.controller;
 
 import com.yanna.stepanova.dto.BookDto;
+import com.yanna.stepanova.dto.BookSearchParams;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.service.BookService;
 import java.util.List;
@@ -39,6 +40,11 @@ public class BookController {
     @GetMapping
     public List<BookDto> getAll() {
         return bookService.getAll();
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParams searchParams) {
+        return bookService.search(searchParams);
     }
 
     @PutMapping("/{id}")
