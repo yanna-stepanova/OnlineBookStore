@@ -1,6 +1,7 @@
 package com.yanna.stepanova.service;
 
 import com.yanna.stepanova.dto.BookDto;
+import com.yanna.stepanova.dto.BookSearchParams;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface BookService {
     void deleteById(Long id);
 
     BookDto updateBook(Long id, CreateBookRequestDto requestDto);
+
+    List<BookDto> search(BookSearchParams params);
 }

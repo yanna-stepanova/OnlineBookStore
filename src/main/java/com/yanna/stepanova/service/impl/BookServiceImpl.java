@@ -1,11 +1,13 @@
 package com.yanna.stepanova.service.impl;
 
 import com.yanna.stepanova.dto.BookDto;
+import com.yanna.stepanova.dto.BookSearchParams;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
 import com.yanna.stepanova.exception.EntityNotFoundException;
 import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
-import com.yanna.stepanova.repository.BookRepository;
+import com.yanna.stepanova.repository.book.BookRepository;
+import com.yanna.stepanova.repository.book.BookSpecificationBuilder;
 import com.yanna.stepanova.service.BookService;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -19,6 +21,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final BookMapper bookMapper;
     private final Random myRandom;
+    private final BookSpecificationBuilder bookSpecBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -61,6 +64,13 @@ public class BookServiceImpl implements BookService {
                 bookRepo.findById(id).orElseThrow(() ->
                         new EntityNotFoundException("Can't get book by id = " + id)), requestDto);
         return bookMapper.toDto(updatedBook);
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParams params) {
+        return bookRepo.findAll(bookSpecBuilder.build(params)).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     private String generateUniqueIsbn() {
