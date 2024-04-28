@@ -3,6 +3,8 @@ package com.yanna.stepanova.service;
 import com.yanna.stepanova.dto.BookDto;
 import com.yanna.stepanova.dto.BookSearchParams;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface BookService {
@@ -12,7 +14,7 @@ public interface BookService {
 
     List<BookDto> getAllByAuthor(String author);
 
-    List<BookDto> getAll();
+    List<BookDto> getAll(Pageable pageable);
 
     void deleteById(Long id);
 
