@@ -72,7 +72,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a book by id",
-            description = "Delete a book by id in the database (not physically - just mark it as deleted)")
+            description = "Delete a book by id (not physically - just mark it as deleted)")
     public String delete(@PathVariable Long id) {
         bookService.deleteById(id);
         return "The book entity was deleted by id: " + id;

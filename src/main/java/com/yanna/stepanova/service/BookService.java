@@ -3,9 +3,8 @@ package com.yanna.stepanova.service;
 import com.yanna.stepanova.dto.BookDto;
 import com.yanna.stepanova.dto.BookSearchParams;
 import com.yanna.stepanova.dto.CreateBookRequestDto;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
