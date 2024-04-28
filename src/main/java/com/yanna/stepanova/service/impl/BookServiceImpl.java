@@ -26,7 +26,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
-        book.setIsbn(generateUniqueIsbn());
+        if (book.getIsbn() == null || book.getIsbn().isBlank()) {
+            book.setIsbn(generateUniqueIsbn());
+        }
         return bookMapper.toDto(bookRepo.save(book));
     }
 
