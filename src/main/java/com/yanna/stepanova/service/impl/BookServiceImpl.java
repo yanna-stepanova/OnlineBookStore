@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -48,8 +49,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAll() {
-        return bookRepo.findAll().stream()
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookRepo.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
