@@ -2,8 +2,10 @@ package com.yanna.stepanova.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.apache.struts.beanvalidation.constraints.FieldMatch;
 import org.hibernate.validator.constraints.Length;
 
+@FieldMatch(first = "password", second = "repeatPassword", message = "These passwords must match")
 public record UserRegistrationRequestDto(
         @NotBlank
         @Email
