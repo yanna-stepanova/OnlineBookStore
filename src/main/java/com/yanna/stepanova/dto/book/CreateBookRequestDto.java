@@ -1,4 +1,4 @@
-package com.yanna.stepanova.dto;
+package com.yanna.stepanova.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

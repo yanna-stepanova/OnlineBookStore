@@ -1,6 +1,6 @@
 package com.yanna.stepanova.repository.book;
 
-import com.yanna.stepanova.dto.BookSearchParams;
+import com.yanna.stepanova.dto.book.BookSearchParams;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.repository.SpecificationBuilder;
 import com.yanna.stepanova.repository.SpecificationProviderManager;

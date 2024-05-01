@@ -1,8 +1,8 @@
 package com.yanna.stepanova.mapper;
 
 import com.yanna.stepanova.config.MapperConfig;
-import com.yanna.stepanova.dto.BookDto;
-import com.yanna.stepanova.dto.CreateBookRequestDto;
+import com.yanna.stepanova.dto.book.BookDto;
+import com.yanna.stepanova.dto.book.CreateBookRequestDto;
 import com.yanna.stepanova.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
