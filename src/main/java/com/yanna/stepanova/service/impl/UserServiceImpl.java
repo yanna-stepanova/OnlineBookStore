@@ -4,7 +4,6 @@ import com.yanna.stepanova.dto.user.UserRegistrationRequestDto;
 import com.yanna.stepanova.dto.user.UserResponseDto;
 import com.yanna.stepanova.exception.RegistrationException;
 import com.yanna.stepanova.mapper.UserMapper;
-import com.yanna.stepanova.model.User;
 import com.yanna.stepanova.repository.user.UserRepository;
 import com.yanna.stepanova.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +18,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
-        if (userRepo.findByEmail(requestDto.email()).isPresent()) {
+        if (userRepo.existsByEmail(requestDto.email())) {
             throw new RegistrationException("This user can't be registered");
         }
-        User user = userMapper.toModel(requestDto);
-        return userMapper.toResponseDto(userRepo.save(user));
+        return userMapper.toResponseDto(userRepo.save(userMapper.toModel(requestDto)));
     }
 }
