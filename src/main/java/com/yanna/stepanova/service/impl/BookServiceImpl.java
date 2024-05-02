@@ -1,8 +1,8 @@
 package com.yanna.stepanova.service.impl;
 
-import com.yanna.stepanova.dto.BookDto;
-import com.yanna.stepanova.dto.BookSearchParams;
-import com.yanna.stepanova.dto.CreateBookRequestDto;
+import com.yanna.stepanova.dto.book.BookDto;
+import com.yanna.stepanova.dto.book.BookSearchParams;
+import com.yanna.stepanova.dto.book.CreateBookRequestDto;
 import com.yanna.stepanova.exception.EntityNotFoundException;
 import com.yanna.stepanova.mapper.BookMapper;
 import com.yanna.stepanova.model.Book;
