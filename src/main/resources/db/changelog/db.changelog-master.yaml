@@ -7,3 +7,5 @@ databaseChangeLog:
       file: /db/changelog/changes/03-insert-default-book.yaml
   - include:
       file: /db/changelog/changes/04-insert-default-user.yaml
+  - include:
+      file: /db/changelog/changes/05-update-password-of-default-user.yaml
