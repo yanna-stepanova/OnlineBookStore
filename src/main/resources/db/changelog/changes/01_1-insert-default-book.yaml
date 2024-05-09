@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: insert_default_book
+      id: insert-default-book
       author: yana_stepanova
       changes:
         - insert:

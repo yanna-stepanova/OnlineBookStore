@@ -5,6 +5,7 @@ import com.yanna.stepanova.dto.user.UserResponseDto;
 import com.yanna.stepanova.exception.RegistrationException;
 import com.yanna.stepanova.mapper.UserMapper;
 import com.yanna.stepanova.model.User;
+import com.yanna.stepanova.repository.user.RoleRepository;
 import com.yanna.stepanova.repository.user.UserRepository;
 import com.yanna.stepanova.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepo;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)

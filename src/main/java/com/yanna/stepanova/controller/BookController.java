@@ -67,6 +67,7 @@ public class BookController {
         return bookService.search(searchParams);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update a book by id",
             description = "Update a book with new data by id in the database")
@@ -75,6 +76,7 @@ public class BookController {
         return bookService.updateBook(id, newRequestDto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a book by id",
             description = "Delete a book by id (not physically - just mark it as deleted)")
