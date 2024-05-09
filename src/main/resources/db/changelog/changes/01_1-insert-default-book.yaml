@@ -17,4 +17,4 @@ databaseChangeLog:
                   value: '000-00-00000000'
               - column:
                   name: price
-                  value: 1.99
+                  value: '1.99'

@@ -11,10 +11,11 @@ databaseChangeLog:
       file: /db/changelog/changes/04_0-add-foreignKeys-users_roles.yaml
   - include:
       file: /db/changelog/changes/01_1-insert-default-book.yaml
-#  - include:
-#      file: /db/changelog/changes/02_1-insert-admin-role.yaml
+  - include:
+      file: /db/changelog/changes/02_1-insert-all-roles.yaml
   - include:
       file: /db/changelog/changes/03_1-insert-in-table-users.yaml
   - include:
       file: /db/changelog/changes/03_2-update-passwords-in-table-users.yaml
-
+  - include:
+      file: /db/changelog/changes/04_1-insert-in-table-users_roles.yaml
