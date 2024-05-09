@@ -2,27 +2,15 @@ databaseChangeLog:
   - changeSet:
       id: insert-role-for-user_admin
       author: yana_stepanova
+      dbms: mysql
       changes:
-        - insert:
-            tableName: users_roles
-            columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 1
-              - column:
-                  name: role_id
-                  valueNumeric: 1
+        - sql:
+            sql: INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
 
   - changeSet:
       id: insert-role-for-user_user
       author: yana_stepanova
+      dbms: mysql
       changes:
-        - insert:
-            tableName: users_roles
-            columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 2
-              - column:
-                  name: role_id
-                  valueNumeric: 3
+        - sql:
+            sql: INSERT INTO users_roles (user_id, role_id) VALUES (2, 3);
