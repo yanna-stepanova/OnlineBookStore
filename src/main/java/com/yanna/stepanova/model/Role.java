@@ -28,10 +28,4 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return name.name();
     }
-
-    public enum RoleName {
-        ROLE_USER,
-        ROLE_MANAGER,
-        ROLE_ADMIN
-    }
 }
