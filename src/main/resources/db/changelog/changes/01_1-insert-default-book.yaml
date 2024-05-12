@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-default-book
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Default book'
+              - column:
+                  name: author
+                  value: 'Default author'
+              - column:
+                  name: isbn
+                  value: '000-00-00000000'
+              - column:
+                  name: price
+                  value: '1.99'
