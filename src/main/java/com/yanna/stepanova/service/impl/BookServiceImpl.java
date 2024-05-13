@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAll(String email, Pageable pageable) {
+    public List<BookDto> getAll(Pageable pageable) {
         return bookRepo.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();

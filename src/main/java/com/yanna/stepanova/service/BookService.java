@@ -13,7 +13,7 @@ public interface BookService {
 
     List<BookDto> getAllByAuthor(String author);
 
-    List<BookDto> getAll(String email, Pageable pageable);
+    List<BookDto> getAll(Pageable pageable);
 
     void deleteById(Long id);
 

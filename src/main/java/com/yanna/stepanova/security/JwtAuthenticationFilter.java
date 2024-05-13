@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final String HEADER_NAME = "Authorization";
-    private static final String CHECK_WORD = "Bearer ";
+    private static final String TOKEN_HEADER = "Bearer ";
     private static final int INDEX_START_TOKEN = 7;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -40,8 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(HEADER_NAME);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(CHECK_WORD)) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_HEADER)) {
             return bearerToken.substring(INDEX_START_TOKEN);
         }
         return null;
