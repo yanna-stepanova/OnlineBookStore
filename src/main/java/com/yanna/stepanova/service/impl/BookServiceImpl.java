@@ -1,6 +1,7 @@
 package com.yanna.stepanova.service.impl;
 
 import com.yanna.stepanova.dto.book.BookDto;
+import com.yanna.stepanova.dto.book.BookDtoWithoutCategoryIds;
 import com.yanna.stepanova.dto.book.BookSearchParams;
 import com.yanna.stepanova.dto.book.CreateBookRequestDto;
 import com.yanna.stepanova.exception.EntityNotFoundException;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final Random myRandom;
     private final BookSpecificationBuilder bookSpecBuilder;
+    //private final CategoryRepository categoryRepo;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -30,6 +32,7 @@ public class BookServiceImpl implements BookService {
         if (book.getIsbn() == null || book.getIsbn().isBlank()) {
             book.setIsbn(generateUniqueIsbn());
         }
+        bookMapper.setCategories(book,requestDto);
         return bookMapper.toDto(bookRepo.save(book));
     }
 
@@ -80,6 +83,16 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> search(BookSearchParams params) {
         return bookRepo.findAll(bookSpecBuilder.build(params)).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> getAllByCategoryId(Long categoryId) {
+        /*Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                String.format("Category with id '%s' wasn't found", categoryId)));*/
+        return bookRepo.findAllByCategorySet_Id(categoryId).stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 
