@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-comics-category
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'comics'
+              - column:
+                  name: description
+                  value: 'Comics books'
+  - changeSet:
+      id: insert-fantasy-category
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'fantasy'
+              - column:
+                  name: description
+                  value: 'Fantasy books'
+  - changeSet:
+      id: insert-detective-category
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'detective'
+              - column:
+                  name: description
+                  value: 'Detective books'

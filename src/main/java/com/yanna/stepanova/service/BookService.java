@@ -1,6 +1,7 @@
 package com.yanna.stepanova.service;
 
 import com.yanna.stepanova.dto.book.BookDto;
+import com.yanna.stepanova.dto.book.BookDtoWithoutCategoryIds;
 import com.yanna.stepanova.dto.book.BookSearchParams;
 import com.yanna.stepanova.dto.book.CreateBookRequestDto;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface BookService {
     BookDto updateBook(Long id, CreateBookRequestDto requestDto);
 
     List<BookDto> search(BookSearchParams params);
+
+    List<BookDtoWithoutCategoryIds> getAllByCategoryId(Long categoryId, Pageable pageable);
 }
