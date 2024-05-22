@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-shopcart-for-default-user
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: shopcarts
+            columns:
+              - column:
+                  name: id
+                  value: '2'
+              - column:
+                  name: user_id
+                  value: '2'

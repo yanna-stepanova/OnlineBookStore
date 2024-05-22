@@ -2,6 +2,7 @@ package com.yanna.stepanova.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,10 +14,12 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -39,9 +42,13 @@ public class Book {
     private String coverImage;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "books_categories",
                 joinColumns = @JoinColumn(name = "book_id"),
                 inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categorySet = new HashSet<>();
+
+    public Book(Long bookId) {
+        this.id = bookId;
+    }
 }

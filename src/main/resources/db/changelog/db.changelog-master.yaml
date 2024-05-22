@@ -24,6 +24,8 @@ databaseChangeLog:
   - include:
       file: /db/changelog/changes/06-create-table-books_categories.yaml
   - include:
-      file: /db/changelog/changes/07-create-table-shopCarts.yaml
+      file: /db/changelog/changes/07-create-table-shopcarts.yaml
   - include:
-      file: /db/changelog/changes/08-create-table-cartItems.yaml
+      file: /db/changelog/changes/07_1-insert-in-table-shopcarts.yaml
+  - include:
+      file: /db/changelog/changes/08-create-table-cart_items.yaml
