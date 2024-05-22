@@ -20,7 +20,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)//?
+    @ManyToOne
     @JoinColumn(name = "shopcart_id", nullable = false)
     private ShoppingCart shopcart;
     @ManyToOne
