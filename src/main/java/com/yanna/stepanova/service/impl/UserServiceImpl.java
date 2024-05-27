@@ -12,6 +12,7 @@ import com.yanna.stepanova.model.User;
 import com.yanna.stepanova.repository.shoppingcart.ShoppingCartRepository;
 import com.yanna.stepanova.repository.user.RoleRepository;
 import com.yanna.stepanova.repository.user.UserRepository;
+import com.yanna.stepanova.service.ShoppingCartService;
 import com.yanna.stepanova.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepo;
     private final ShoppingCartRepository shopCartRepo;
     private final ShoppingCartMapper shopCartMapper;
+    private final ShoppingCartService shopCartService;
 
     @Override
     @Transactional
@@ -44,18 +46,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(generateDefaultSetRoles());
         User savedUser = userRepo.save(user);
-        if (!shopCartRepo.existsById(savedUser.getId())) {
-            ShoppingCart shoppingCart = shopCartMapper.mapUserToShopCart(savedUser);
-            shopCartRepo.save(shoppingCart);
-        }
+        shopCartService.createShoppingCart(savedUser);
         return userMapper.toResponseDto(savedUser);
-    }
-
-    @Override
-    public User getAuthenticatedUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return (User) userRepo.findByEmail(email).orElseThrow(() ->
-                new EntityNotFoundException("Can't find user by email: " + email));
     }
 
     private Set<Role> generateDefaultSetRoles() {

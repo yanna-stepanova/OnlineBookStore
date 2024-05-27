@@ -10,6 +10,7 @@ import com.yanna.stepanova.model.ShoppingCart;
 import com.yanna.stepanova.model.User;
 import com.yanna.stepanova.repository.book.BookRepository;
 import com.yanna.stepanova.repository.shoppingcart.CartItemRepository;
+import com.yanna.stepanova.repository.shoppingcart.ShoppingCartRepository;
 import com.yanna.stepanova.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepo;
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepo;
+    private final ShoppingCartRepository shopCartRepo;
 
     @Override
     @Transactional
@@ -38,23 +40,21 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     public CartItemDto updateQuantity(User user, Long cartItemId,
                                       CartItemQuantityRequestDto requestDto) {
-        CartItem cartItem = cartItemRepo.findById(cartItemId)
-                .filter(item -> item.getShopcart().getUser().getId().equals(user.getId()))
+        CartItem cartItemFromDB = cartItemRepo.findByIdAndShoppingCartId(cartItemId, user.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "This authenticated user isn't owner of cartItem by id = " + cartItemId));
-        CartItem updatedCartItem = cartItemMapper.updateQuantityFromDto(cartItem, requestDto);
-        return cartItemMapper.toDto(updatedCartItem);
+                        String.format("Can't find cartItem by id = %s for this user", cartItemId)));
+        cartItemFromDB.setQuantity(requestDto.quantity());
+        return cartItemMapper.toDto(cartItemRepo.save(cartItemFromDB));
     }
 
     @Override
     @Transactional
-    public boolean deleteById(Long cartItemId, User user) {
-        boolean isOwner = cartItemRepo.findById(cartItemId)
-                .filter(item -> item.getShopcart().getUser().getId().equals(user.getId()))
-                .isPresent();
-        if (isOwner) {
-            cartItemRepo.deleteById(cartItemId);
-        }
-        return isOwner;
+    public void deleteById(Long cartItemId, User user) {
+        ShoppingCart shopCart = shopCartRepo.findById(user.getId()).orElseThrow(() ->
+                new EntityNotFoundException("Can't find shopping cart by id: " + user.getId()));
+        CartItem cartItem = cartItemRepo.findByIdAndShoppingCartId(cartItemId, shopCart.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Can't find cartItem by id = %s for this user", cartItemId)));
+        cartItemRepo.deleteById(cartItemId);
     }
 }

@@ -20,10 +20,11 @@ public interface ShoppingCartMapper {
     }
 
     @Mapping(target = "cartItems", ignore = true)
+    @Mapping(source = "user.id", target = "userId")
     ShoppingCartDto toDto(ShoppingCart shopCart);
 
-    @AfterMapping
+   /* @AfterMapping
     default void setUserId(@MappingTarget ShoppingCartDto shopCartDto, ShoppingCart shopCart) {
         shopCartDto.setUserId(shopCart.getUser().getId());
-    }
+    }*/
 }

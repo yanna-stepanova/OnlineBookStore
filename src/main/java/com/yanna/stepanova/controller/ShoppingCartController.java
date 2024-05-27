@@ -5,6 +5,7 @@ import com.yanna.stepanova.dto.cartitem.CartItemQuantityRequestDto;
 import com.yanna.stepanova.dto.cartitem.CreateCartItemRequestDto;
 import com.yanna.stepanova.dto.shoppingcart.ShoppingCartDto;
 import com.yanna.stepanova.model.User;
+import com.yanna.stepanova.security.AuthenticationService;
 import com.yanna.stepanova.service.CartItemService;
 import com.yanna.stepanova.service.ShoppingCartService;
 import com.yanna.stepanova.service.UserService;
@@ -14,6 +15,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,10 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cart")
+@Validated
 public class ShoppingCartController {
     private final CartItemService cartItemService;
     private final ShoppingCartService shopCartService;
-    private final UserService userService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
@@ -64,12 +68,11 @@ public class ShoppingCartController {
     @Operation(summary = "Remove a book from the shopping cart",
                description = "Remove purchases by id from the shopping cart "
                     + "(physically - not mark it as deleted)")
-    public String delete(@PathVariable @Positive Long id) {
-        return String.format("The cart item entity by id = %s was deleted: %s", id,
-                cartItemService.deleteById(id, getAuthenticatedUser()));
+    public void delete(@PathVariable @Positive Long id) {
+        cartItemService.deleteById(id, getAuthenticatedUser());
     }
 
     private User getAuthenticatedUser() {
-        return userService.getAuthenticatedUser();
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

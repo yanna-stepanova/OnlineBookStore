@@ -12,5 +12,5 @@ public interface CartItemService {
     CartItemDto updateQuantity(User authenticatedUser, Long cartItemId,
                                CartItemQuantityRequestDto requestDto);
 
-    boolean deleteById(Long id, User user);
+    void deleteById(Long id, User user);
 }

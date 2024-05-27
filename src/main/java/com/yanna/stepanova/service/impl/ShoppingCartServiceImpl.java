@@ -40,4 +40,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shopCartDto.setCartItems(collect);
         return shopCartDto;
     }
+
+    @Override
+    public void createShoppingCart(User user) {
+        ShoppingCart shopCart = new ShoppingCart();
+        shopCart.setId(user.getId()); // it's wrong: need to use @MapsId
+        shopCart.setUser(user);
+        shopCartRepo.save(shopCart);
+    }
 }

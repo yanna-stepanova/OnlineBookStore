@@ -8,4 +8,6 @@ public interface ShoppingCartService {
     ShoppingCart getShopCart(User user);
 
     ShoppingCartDto getShopCartDto(User user);
+
+    void createShoppingCart(User user);
 }
