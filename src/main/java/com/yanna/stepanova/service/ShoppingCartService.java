@@ -5,9 +5,9 @@ import com.yanna.stepanova.model.ShoppingCart;
 import com.yanna.stepanova.model.User;
 
 public interface ShoppingCartService {
-    ShoppingCart getShopCart(User user);
+    ShoppingCart getShopCart(Long userId);
 
-    ShoppingCartDto getShopCartDto(User user);
+    ShoppingCartDto getShopCartDto(Long userId);
 
     void createShoppingCart(User user);
 }

@@ -27,8 +27,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @NamedEntityGraph(name = "Book.categorySet",
         attributeNodes = @NamedAttributeNode("categorySet"))
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE books SET is_deleted = TRUE WHERE id = ?")
+@SQLRestriction("is_deleted = FALSE")
 @Table(name = "books")
 public class Book {
     @Id

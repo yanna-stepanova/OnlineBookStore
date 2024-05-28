@@ -18,20 +18,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shopCartMapper;
 
     @Override
-    public ShoppingCart getShopCart(User user) {
-        return shopCartRepo.findById(user.getId()).orElseThrow(() ->
-                new EntityNotFoundException("Can't find shopping cart by id:" + user.getId()));
+    public ShoppingCart getShopCart(Long userId) {
+        return shopCartRepo.findById(userId).orElseThrow(() ->
+                new EntityNotFoundException("Can't find shopping cart by id:" + userId));
     }
 
     @Override
     @Transactional
-    public ShoppingCartDto getShopCartDto(User user) {
-        return shopCartMapper.toDto(getShopCart(user));
+    public ShoppingCartDto getShopCartDto(Long userId) {
+        return shopCartMapper.toDto(getShopCart(userId));
     }
 
     @Override
     public void createShoppingCart(User user) {
-        ShoppingCart shopCart = shopCartMapper.mapUserToShopCart(user);
-        shopCartRepo.save(shopCart);
+        shopCartRepo.save(shopCartMapper.mapUserToShopCart(user));
     }
 }

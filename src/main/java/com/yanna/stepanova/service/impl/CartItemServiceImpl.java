@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class CartItemServiceImpl implements CartItemService {
@@ -26,7 +27,6 @@ public class CartItemServiceImpl implements CartItemService {
     private final ShoppingCartRepository shopCartRepo;
 
     @Override
-    @Transactional
     public CartItemDto save(CreateCartItemRequestDto requestDto, ShoppingCart shopCart) {
         CartItem cartItem = cartItemMapper.toModel(requestDto);
         Book bookFromDB = bookRepo.findById(cartItem.getBook().getId()).orElseThrow(() ->
@@ -39,7 +39,6 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    @Transactional
     public CartItemDto updateQuantity(User user, Long cartItemId,
                                       CartItemQuantityRequestDto requestDto) {
         CartItem cartItemFromDB = getCartItemByIdAndUser(cartItemId, user);
@@ -48,7 +47,6 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long cartItemId, User user) {
         cartItemRepo.delete(getCartItemByIdAndUser(cartItemId, user));
     }
