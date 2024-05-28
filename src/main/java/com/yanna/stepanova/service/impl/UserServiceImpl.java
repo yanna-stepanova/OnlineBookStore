@@ -3,13 +3,10 @@ package com.yanna.stepanova.service.impl;
 import com.yanna.stepanova.dto.user.UserRegistrationRequestDto;
 import com.yanna.stepanova.dto.user.UserResponseDto;
 import com.yanna.stepanova.exception.RegistrationException;
-import com.yanna.stepanova.mapper.ShoppingCartMapper;
 import com.yanna.stepanova.mapper.UserMapper;
 import com.yanna.stepanova.model.Role;
 import com.yanna.stepanova.model.RoleName;
-import com.yanna.stepanova.model.ShoppingCart;
 import com.yanna.stepanova.model.User;
-import com.yanna.stepanova.repository.shoppingcart.ShoppingCartRepository;
 import com.yanna.stepanova.repository.user.RoleRepository;
 import com.yanna.stepanova.repository.user.UserRepository;
 import com.yanna.stepanova.service.ShoppingCartService;
@@ -19,7 +16,6 @@ import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +27,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepo;
-    private final ShoppingCartRepository shopCartRepo;
-    private final ShoppingCartMapper shopCartMapper;
     private final ShoppingCartService shopCartService;
 
     @Override
