@@ -15,10 +15,4 @@ public interface CartItemMapper {
     @Mapping(source = "book.id", target = "bookId")
     @Mapping(source = "book.title", target = "bookTitle")
     CartItemDto toDto(CartItem cartItem);
-
-  /*  @AfterMapping
-    default void setBook(@MappingTarget CartItemDto cartItemDto, CartItem cartItem) {
-        cartItemDto.setBookId(cartItem.getBook().getId());
-        cartItemDto.setBookTitle(cartItem.getBook().getTitle());
-    }*/
 }

@@ -1,23 +1,18 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-shopcarts
+      id: create-table-shopping_carts
       author: yana_stepanova
       changes:
         - createTable:
             tableName: shopping_carts
             columns:
               - column:
-                  name: id
+                  name: user_id
                   type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
-              - column:
-                  name: user_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_shopcarts_users
+                    foreignKeyName: fk_shopCarts_users
                     referencedTableName: users
                     referencedColumnNames: id
               - column:

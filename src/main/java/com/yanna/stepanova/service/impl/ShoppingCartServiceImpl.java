@@ -34,10 +34,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public ShoppingCartDto getShopCartDto(User user) {
         ShoppingCartDto shopCartDto = shopCartMapper.toDto(getShopCart(user));
-        Set<CartItemDto> collect = cartItemRepo.findAllByShopCartId(shopCartDto.getId()).stream()
+ /*       Set<CartItemDto> collect = cartItemRepo.findAllByShopCartId(shopCartDto.getUserId()).stream()
                 .map(cartItemMapper::toDto)
                 .collect(Collectors.toSet());
-        shopCartDto.setCartItems(collect);
+        shopCartDto.setCartItems(collect);*/
         return shopCartDto;
     }
 

@@ -33,16 +33,16 @@ public class CartItemServiceImpl implements CartItemService {
                 new EntityNotFoundException("Can't find book by id=" + requestDto.bookId()));
         cartItem.setBook(bookFromDB);
         cartItem.setShopcart(shopCart);
-        return cartItemMapper.toDto(cartItemRepo.save(cartItem));
+        CartItem savedCartItem = cartItemRepo.save(cartItem);
+        shopCart.setCartItems(cartItemRepo.findAllByShopCartId(shopCart.getId()));
+        return cartItemMapper.toDto(savedCartItem);
     }
 
     @Override
     @Transactional
     public CartItemDto updateQuantity(User user, Long cartItemId,
                                       CartItemQuantityRequestDto requestDto) {
-        CartItem cartItemFromDB = cartItemRepo.findByIdAndShoppingCartId(cartItemId, user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Can't find cartItem by id = %s for this user", cartItemId)));
+        CartItem cartItemFromDB = getCartItemByIdAndUser(cartItemId, user);
         cartItemFromDB.setQuantity(requestDto.quantity());
         return cartItemMapper.toDto(cartItemRepo.save(cartItemFromDB));
     }
@@ -50,11 +50,17 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Transactional
     public void deleteById(Long cartItemId, User user) {
-        ShoppingCart shopCart = shopCartRepo.findById(user.getId()).orElseThrow(() ->
+        cartItemRepo.delete(getCartItemByIdAndUser(cartItemId, user));
+    }
+
+    private ShoppingCart getShopCartByUser(User user) {
+       return shopCartRepo.findById(user.getId()).orElseThrow(() ->
                 new EntityNotFoundException("Can't find shopping cart by id: " + user.getId()));
-        CartItem cartItem = cartItemRepo.findByIdAndShoppingCartId(cartItemId, shopCart.getId())
+    }
+
+    private CartItem getCartItemByIdAndUser(Long cartItemId, User user) {
+        return cartItemRepo.findByIdAndShoppingCartId(cartItemId, getShopCartByUser(user).getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Can't find cartItem by id = %s for this user", cartItemId)));
-        cartItemRepo.deleteById(cartItemId);
     }
 }

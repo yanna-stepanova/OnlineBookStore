@@ -20,7 +20,7 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_cart_items_shopcarts
                     referencedTableName: shopping_carts
-                    referencedColumnNames: id
+                    referencedColumnNames: user_id
               - column:
                   name: book_id
                   type: bigint
