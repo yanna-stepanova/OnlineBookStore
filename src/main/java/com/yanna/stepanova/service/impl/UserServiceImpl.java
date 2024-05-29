@@ -9,8 +9,10 @@ import com.yanna.stepanova.model.RoleName;
 import com.yanna.stepanova.model.User;
 import com.yanna.stepanova.repository.user.RoleRepository;
 import com.yanna.stepanova.repository.user.UserRepository;
+import com.yanna.stepanova.service.ShoppingCartService;
 import com.yanna.stepanova.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepo;
+    private final ShoppingCartService shopCartService;
 
     @Override
+    @Transactional
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepo.existsByEmail(requestDto.email())) {
@@ -35,7 +39,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(generateDefaultSetRoles());
-        return userMapper.toResponseDto(userRepo.save(user));
+        User savedUser = userRepo.save(user);
+        shopCartService.createShoppingCart(savedUser);
+        return userMapper.toResponseDto(savedUser);
     }
 
     private Set<Role> generateDefaultSetRoles() {
