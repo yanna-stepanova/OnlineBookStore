@@ -4,13 +4,12 @@ import com.yanna.stepanova.dto.cartitem.CartItemDto;
 import com.yanna.stepanova.dto.cartitem.CartItemQuantityRequestDto;
 import com.yanna.stepanova.dto.cartitem.CreateCartItemRequestDto;
 import com.yanna.stepanova.model.ShoppingCart;
-import com.yanna.stepanova.model.User;
 
 public interface CartItemService {
     CartItemDto save(CreateCartItemRequestDto requestDto, ShoppingCart shopCart);
 
-    CartItemDto updateQuantity(User authenticatedUser, Long cartItemId,
+    CartItemDto updateQuantity(Long userId, Long cartItemId,
                                CartItemQuantityRequestDto requestDto);
 
-    void deleteById(Long id, User user);
+    void deleteById(Long id, Long userId);
 }
