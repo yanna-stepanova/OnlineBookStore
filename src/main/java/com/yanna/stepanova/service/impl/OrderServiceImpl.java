@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -36,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemService orderItemService;
     private final ShoppingCartService shopCartService;
 
+    @Transactional
     @Override
     public OrderDto save(CreateOrderRequestDto requestDto, User user) {
         Order order = orderMapper.toModel(requestDto);
@@ -58,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public OrderDtoWithoutOrderItems updateStatusById(Long id, OrderStatusRequestDto requestDto) {
         Order oldOrder = orderRepo.findById(id).orElseThrow(() ->
