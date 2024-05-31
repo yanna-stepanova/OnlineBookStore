@@ -59,7 +59,8 @@ public class ShoppingCartController {
             @PathVariable @Positive Long id,
             @RequestBody @Valid CartItemQuantityRequestDto requestDto,
             Authentication authentication) {
-        return cartItemService.updateQuantity(getAuthenticatedUser(authentication), id, requestDto);
+        return cartItemService.updateQuantity(getAuthenticatedUser(authentication).getId(),
+                id, requestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -68,7 +69,7 @@ public class ShoppingCartController {
                description = "Remove purchases by id from the shopping cart "
                     + "(physically - not mark it as deleted)")
     public void delete(@PathVariable @Positive Long id, Authentication authentication) {
-        cartItemService.deleteById(id, getAuthenticatedUser(authentication));
+        cartItemService.deleteById(id, getAuthenticatedUser(authentication).getId());
     }
 
     private User getAuthenticatedUser(Authentication authentication) {

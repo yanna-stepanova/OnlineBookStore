@@ -7,11 +7,10 @@ import com.yanna.stepanova.mapper.CartItemMapper;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.model.CartItem;
 import com.yanna.stepanova.model.ShoppingCart;
-import com.yanna.stepanova.model.User;
 import com.yanna.stepanova.repository.book.BookRepository;
 import com.yanna.stepanova.repository.shoppingcart.CartItemRepository;
-import com.yanna.stepanova.repository.shoppingcart.ShoppingCartRepository;
 import com.yanna.stepanova.service.CartItemService;
+import com.yanna.stepanova.service.ShoppingCartService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepo;
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepo;
-    private final ShoppingCartRepository shopCartRepo;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public CartItemDto save(CreateCartItemRequestDto requestDto, ShoppingCart shopCart) {
@@ -39,25 +38,21 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemDto updateQuantity(User user, Long cartItemId,
+    public CartItemDto updateQuantity(Long userId, Long cartItemId,
                                       CartItemQuantityRequestDto requestDto) {
-        CartItem cartItemFromDB = getCartItemByIdAndUser(cartItemId, user);
+        CartItem cartItemFromDB = getCartItemByIdAndUserId(cartItemId, userId);
         cartItemFromDB.setQuantity(requestDto.quantity());
         return cartItemMapper.toDto(cartItemRepo.save(cartItemFromDB));
     }
 
     @Override
-    public void deleteById(Long cartItemId, User user) {
-        cartItemRepo.delete(getCartItemByIdAndUser(cartItemId, user));
+    public void deleteById(Long cartItemId, Long userId) {
+        cartItemRepo.delete(getCartItemByIdAndUserId(cartItemId, userId));
     }
 
-    private ShoppingCart getShopCartByUser(User user) {
-        return shopCartRepo.findById(user.getId()).orElseThrow(() ->
-                new EntityNotFoundException("Can't find shopping cart by id: " + user.getId()));
-    }
-
-    private CartItem getCartItemByIdAndUser(Long cartItemId, User user) {
-        return cartItemRepo.findByIdAndShoppingCartId(cartItemId, getShopCartByUser(user).getId())
+    private CartItem getCartItemByIdAndUserId(Long cartItemId, Long userId) {
+        return cartItemRepo.findByIdAndShoppingCartId(
+                cartItemId, shoppingCartService.getShopCart(userId).getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Can't find cartItem by id = %s for this user", cartItemId)));
     }
