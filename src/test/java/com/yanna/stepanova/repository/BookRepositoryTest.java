@@ -24,9 +24,9 @@ class BookRepositoryTest {
     @Test
     @DisplayName("""
             Find all five books""")
-    @Sql(scripts = "classpath:database/add-four-books.sql",
+    @Sql(scripts = "classpath:database/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/remove-four-books.sql",
+    @Sql(scripts = "classpath:database/repository/remove-four-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAll_FiveBooks_Ok() {
         Page<Book> expected = bookRepo.findAll(PageRequest.of(0, 10));
@@ -50,9 +50,9 @@ class BookRepositoryTest {
     @Test
     @DisplayName("""
             Find books by existing author""")
-    @Sql(scripts = "classpath:database/add-four-books.sql",
+    @Sql(scripts = "classpath:database/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/remove-four-books.sql",
+    @Sql(scripts = "classpath:database/repository/remove-four-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByAuthorContainsIgnoreCase_ExistingAuthor_Ok() {
         List<Book> expected = bookRepo.findAllByAuthorContainsIgnoreCase(AUTHOR);
@@ -70,11 +70,11 @@ class BookRepositoryTest {
     @Test
     @DisplayName("""
             Find all books by valid category id""")
-    @Sql(scripts = {"classpath:database/add-four-books.sql",
-            "classpath:database/add-category-for-four-books.sql"},
+    @Sql(scripts = {"classpath:database/repository/add-four-books.sql",
+            "classpath:database/repository/add-category-for-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/remove-all-entities-of-books_categories.sql",
-            "classpath:database/remove-four-books.sql"},
+    @Sql(scripts = {"classpath:database/repository/remove-all-entities-of-books_categories.sql",
+            "classpath:database/repository/remove-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategorySet_Id_ValidCategoryId_Ok() {
         List<Book> expected = bookRepo.findAllByCategorySet_Id(2L, PageRequest.of(0, 10));
