@@ -9,13 +9,11 @@ import com.yanna.stepanova.model.Category;
 import com.yanna.stepanova.repository.book.BookRepository;
 import com.yanna.stepanova.service.impl.BookServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +32,6 @@ class BookServiceTest {
     private BookRepository bookRepo;
     @Mock
     private BookMapper bookMapper;
-
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -143,7 +140,6 @@ class BookServiceTest {
         book.setDescription("Some description");
         book.setCoverImage("Some image");
         book.setCategorySet(Set.of(new Category(1L)));
-        List<Book> bookList = List.of(book);
 
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
@@ -157,6 +153,7 @@ class BookServiceTest {
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
 
+        List<Book> bookList = List.of(book);
         Mockito.when(bookRepo.findAllByAuthorContainsIgnoreCase(author)).thenReturn(bookList);
         Mockito.when(bookMapper.toDto(book)).thenReturn(bookDto);
 
@@ -188,8 +185,6 @@ class BookServiceTest {
         book2.setIsbn("111-11-00000000");
         book2.setCategorySet(Set.of());
 
-        List<Book> bookList = List.of(book1, book2);
-
         BookDto bookDto1 = new BookDto();
         bookDto1.setId(book1.getId());
         bookDto1.setTitle(book1.getTitle());
@@ -212,6 +207,8 @@ class BookServiceTest {
         bookDto2.setCategoryIds(book2.getCategorySet().stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
+
+        List<Book> bookList = List.of(book1, book2);
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Book> bookPage = new PageImpl<>(bookList, pageable, bookList.size());
         Mockito.when(bookRepo.findAll(pageable)).thenReturn(bookPage);
@@ -230,10 +227,6 @@ class BookServiceTest {
     public void updateBook_WithValidIdAndRequestDto_ReturnBookDto() {
         //given
         Long bookId = 7L;
-        CreateBookRequestDto requestDto = new CreateBookRequestDto("Update title", "Update author",
-                "000-00-12345678", BigDecimal.valueOf(1.23), Set.of(1L, 2L),
-                "Update description", "Update cover image");
-
         Book oldBook = new Book(bookId);
         oldBook.setTitle("Old title");
         oldBook.setAuthor("Old author");
@@ -243,6 +236,9 @@ class BookServiceTest {
         oldBook.setCoverImage("Old image");
         oldBook.setCategorySet(null);
 
+        CreateBookRequestDto requestDto = new CreateBookRequestDto("Update title", "Update author",
+                "000-00-12345678", BigDecimal.valueOf(1.23), Set.of(1L, 2L),
+                "Update description", "Update cover image");
         Book updatedBook = new Book(oldBook.getId());
         updatedBook.setTitle(requestDto.title());
         updatedBook.setAuthor(requestDto.author());
@@ -297,11 +293,9 @@ class BookServiceTest {
     @Test
     @DisplayName("""
             Get all books without category id by valid category id""")
-    public void getAllByCategoryId_WithValidCategotyId_ReturnAllBookDtoWithoutCategoryIds() {
+    public void getAllByCategoryId_WithValidCategoryId_ReturnAllBookDtoWithoutCategoryIds() {
         //given
         Long categoryId = 1L;
-        PageRequest pageable = PageRequest.of(0, 10);
-
         Book book1 = new Book(1L);
         book1.setTitle("First title");
         book1.setAuthor("Writer A");
@@ -309,14 +303,14 @@ class BookServiceTest {
         book1.setIsbn("111-00-00000000");
         book1.setDescription("Some description");
         book1.setCoverImage("Some image");
-        book1.setCategorySet(Set.of(new Category(1L)));
+        book1.setCategorySet(Set.of(new Category(categoryId)));
 
         Book book2 = new Book(2L);
         book2.setTitle("Second title");
         book2.setAuthor("Writer B");
         book2.setPrice(BigDecimal.valueOf(3.00));
         book2.setIsbn("111-11-00000000");
-        book2.setCategorySet(Set.of(new Category(1L), new Category(2L)));
+        book2.setCategorySet(Set.of(new Category(categoryId), new Category(2L)));
 
         BookDtoWithoutCategoryIds bookDtoWithout1 = new BookDtoWithoutCategoryIds(book1.getId(),
                  book1.getTitle(), book1.getAuthor(), book1.getPrice(), book1.getIsbn(),
@@ -326,13 +320,14 @@ class BookServiceTest {
                 book2.getDescription(), book2.getCoverImage());
 
         List<Book> bookList = List.of(book1, book2);
-
+        PageRequest pageable = PageRequest.of(0, 10);
         Mockito.when(bookRepo.findAllByCategorySet_Id(categoryId, pageable)).thenReturn(bookList);
         Mockito.when(bookMapper.toDtoWithoutCategories(book1)).thenReturn(bookDtoWithout1);
         Mockito.when(bookMapper.toDtoWithoutCategories(book2)).thenReturn(bookDtoWithout2);
         //when
         List<BookDtoWithoutCategoryIds> expected = List.of(bookDtoWithout1, bookDtoWithout2);
-        List<BookDtoWithoutCategoryIds> actual = bookService.getAllByCategoryId(categoryId, pageable);
+        List<BookDtoWithoutCategoryIds> actual = bookService.getAllByCategoryId(categoryId,
+                pageable);
         //then
         Assertions.assertArrayEquals(expected.toArray(), actual.toArray());
     }
