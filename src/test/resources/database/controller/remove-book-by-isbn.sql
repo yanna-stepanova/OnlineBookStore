@@ -1,0 +1,1 @@
+DELETE FROM books WHERE isbn = '978-161-729-045-9';
