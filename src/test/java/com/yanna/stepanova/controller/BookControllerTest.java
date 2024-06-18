@@ -54,7 +54,7 @@ class BookControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/controller/"
+                    new ClassPathResource("database/book/controller/"
                             + "add-three-entities-in-books-and-books_categories.sql"));
         }
     }
@@ -69,14 +69,14 @@ class BookControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/controller/"
+                    new ClassPathResource("database/book/controller/"
                             + "remove-all-from-books-and-books_categories.sql"));
         }
     }
 
     @Test
     @DisplayName("Create a new book")
-    @Sql(scripts = "classpath:database/controller/remove-book-by-isbn.sql",
+    @Sql(scripts = "classpath:database/book/controller/remove-book-by-isbn.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void createBook_ValidRequestDto_Success() throws Exception {
@@ -190,9 +190,9 @@ class BookControllerTest {
 
     @Test
     @DisplayName("Update a book by valid id and requestDto")
-    @Sql(scripts = "classpath:database/controller/add-book-for-updating.sql",
+    @Sql(scripts = "classpath:database/book/controller/add-book-for-updating.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/controller/remove-updated-book.sql",
+    @Sql(scripts = "classpath:database/book/controller/remove-updated-book.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void updateBookById_GivenValidAndRequestDto_Success() throws Exception {
@@ -219,7 +219,7 @@ class BookControllerTest {
 
     @Test
     @DisplayName("Delete a book by valid id")
-    @Sql(scripts = "classpath:database/controller/add-book-to-delete.sql",
+    @Sql(scripts = "classpath:database/book/controller/add-book-to-delete.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void delete_GivenValidId_Success() throws Exception {
