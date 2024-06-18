@@ -1,12 +1,30 @@
 package com.yanna.stepanova.controller;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanna.stepanova.dto.book.BookDto;
 import com.yanna.stepanova.dto.book.CreateBookRequestDto;
 import jakarta.servlet.ServletException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -18,21 +36,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
@@ -51,7 +54,8 @@ class BookControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/controller/add-three-entities-in-books-and-books_categories.sql"));
+                    new ClassPathResource("database/controller/"
+                            + "add-three-entities-in-books-and-books_categories.sql"));
         }
     }
 
@@ -65,7 +69,8 @@ class BookControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/controller/remove-all-from-books-and-books_categories.sql"));
+                    new ClassPathResource("database/controller/"
+                            + "remove-all-from-books-and-books_categories.sql"));
         }
     }
 
@@ -94,7 +99,8 @@ class BookControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
         //then
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto.class);
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
@@ -112,7 +118,8 @@ class BookControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
         //then
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto.class);
         BookDto expected = getAllBooksDto().get(0);
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
@@ -129,7 +136,8 @@ class BookControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andReturn();
-            BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+            BookDto actual = objectMapper.readValue(
+                    result.getResponse().getContentAsString(), BookDto.class);
             //then
             Assertions.assertNull(actual, String.format("Id=%s should be non-existing", bookId));
         } catch (ServletException exception) {
@@ -151,7 +159,8 @@ class BookControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        BookDto[] actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto[].class);
+        BookDto[] actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto[].class);
         List<BookDto> expected = getAllBooksDto().stream()
                 .filter(book -> book.getAuthor().toLowerCase().contains(author.toLowerCase()))
                 .toList();
@@ -171,7 +180,8 @@ class BookControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
         //then
-        BookDto[] actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto[].class);
+        BookDto[] actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto[].class);
         Assertions.assertEquals(expected.size(), actual.length);
         for (int i = 0; i < expected.size(); i++) {
             Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected.get(i), actual[i]));
@@ -191,8 +201,9 @@ class BookControllerTest {
         CreateBookRequestDto requestDto = new CreateBookRequestDto("Update title", "Update author",
                 "654-123-456-789-0", BigDecimal.valueOf(99.99), Set.of(),
                 "Update description", "update cover image");
-        BookDto expected = new BookDto(bookId, requestDto.title(), requestDto.author(), requestDto.price(),
-                requestDto.isbn(), requestDto.categoryIds(), requestDto.description(), requestDto.coverImage());
+        BookDto expected = new BookDto(bookId, requestDto.title(), requestDto.author(),
+                requestDto.price(), requestDto.isbn(), requestDto.categoryIds(),
+                requestDto.description(), requestDto.coverImage());
         //when
         MvcResult result = mockMvc.perform(put("/books/{id}", bookId)
                         .content(objectMapper.writeValueAsString(requestDto))
@@ -200,7 +211,8 @@ class BookControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
         //then
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), BookDto.class);
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
@@ -225,13 +237,13 @@ class BookControllerTest {
     private List<BookDto> getAllBooksDto() {
         List<BookDto> bookDtoList = new ArrayList<>();
         bookDtoList.add(new BookDto(1L, "First book", "Writer A",
-                BigDecimal.valueOf(1.23), "000-00-00000001",  Set.of(1L),
+                BigDecimal.valueOf(1.23), "000-00-00000001", Set.of(1L),
                 "Book 1", "http://example.com/cover_1.jpg"));
         bookDtoList.add(new BookDto(2L, "Second book", "Writer B",
-                BigDecimal.valueOf(2.34), "000-00-00000002",  Set.of(2L),
+                BigDecimal.valueOf(2.34), "000-00-00000002", Set.of(2L),
                 "Book 2", "http://example.com/cover_2.jpg"));
         bookDtoList.add(new BookDto(3L, "Third book", "Writer C",
-                BigDecimal.valueOf(3.45), "000-00-00000003",  Set.of(3L),
+                BigDecimal.valueOf(3.45), "000-00-00000003", Set.of(3L),
                 "Book 3", "http://example.com/cover_3.jpg"));
         return bookDtoList;
     }
