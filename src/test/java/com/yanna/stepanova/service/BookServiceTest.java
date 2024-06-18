@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,13 +39,12 @@ class BookServiceTest {
 
     @Test
     @DisplayName("""
-            Get correct bookDto for valid requestDto""")
+            Get correct BookDto for valid requestDto""")
     public void save_WithValidRequestDto_ReturnBookDto() {
         //given
         CreateBookRequestDto requestDto = new CreateBookRequestDto("Title 1", "Writer 1",
                 "000-11-00000000", BigDecimal.valueOf(0.99), Set.of(5L, 8L, 9L),
                 "Description", "Cover image");
-
         Book book = new Book();
         book.setTitle(requestDto.title());
         book.setAuthor(requestDto.author());
@@ -54,7 +55,6 @@ class BookServiceTest {
         book.setCategorySet(requestDto.categoryIds().stream()
                 .map(Category::new)
                 .collect(Collectors.toSet()));
-
         BookDto expected = new BookDto();
         expected.setId(2L);
         expected.setTitle(book.getTitle());
@@ -73,12 +73,12 @@ class BookServiceTest {
         //when
         BookDto actual = bookService.save(requestDto);
         //then
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
     @DisplayName("""
-            Get correct bookDto for existing book""")
+            Get correct BookDto for existing book""")
     public void getBookById_WithValidId_ReturnBookDto() {
         //given
         Long bookId = 1L;
@@ -107,7 +107,7 @@ class BookServiceTest {
         //when
         BookDto actual = bookService.getBookById(bookId);
         //then
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
@@ -128,7 +128,7 @@ class BookServiceTest {
 
     @Test
     @DisplayName("""
-            Get a list of bookDto by author""")
+            Get a list of BookDto by author""")
     public void getAllByAuthor_WithValidAuthor_ReturnListBookDto() {
         //given
         String author = "Writer_1";
@@ -161,12 +161,15 @@ class BookServiceTest {
         List<BookDto> expected = List.of(bookDto);
         List<BookDto> actual = bookService.getAllByAuthor(author);
         //then
-        Assertions.assertArrayEquals(expected.toArray(), actual.toArray());
+        for (int i = 0; i < expected.size(); i++) {
+            Assertions.assertTrue(
+                    EqualsBuilder.reflectionEquals(expected.get(i), actual.get(i)));
+        }
     }
 
     @Test
     @DisplayName("""
-            Get a list of all bookDto""")
+            Get a list of all BookDto""")
     public void getAll_WithValidPageable_ReturnAllBookDto() {
         //given
         Book book1 = new Book(1L);
@@ -218,12 +221,15 @@ class BookServiceTest {
         List<BookDto> expected = List.of(bookDto1, bookDto2);
         List<BookDto> actual = bookService.getAll(pageable);
         //then
-        Assertions.assertArrayEquals(expected.toArray(), actual.toArray());
+        for (int i = 0; i < expected.size(); i++) {
+            Assertions.assertTrue(
+                    EqualsBuilder.reflectionEquals(expected.get(i), actual.get(i)));
+        }
     }
 
     @Test
     @DisplayName("""
-            Get updated bookDto by valid id""")
+            Get updated BookDto by valid id""")
     public void updateBook_WithValidIdAndRequestDto_ReturnBookDto() {
         //given
         Long bookId = 7L;
@@ -268,7 +274,7 @@ class BookServiceTest {
         //when
         BookDto actual = bookService.updateBook(bookId, requestDto);
         //then
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
@@ -329,7 +335,10 @@ class BookServiceTest {
         List<BookDtoWithoutCategoryIds> actual = bookService.getAllByCategoryId(categoryId,
                 pageable);
         //then
-        Assertions.assertArrayEquals(expected.toArray(), actual.toArray());
+        for (int i = 0; i < expected.size(); i++) {
+            Assertions.assertTrue(
+                    EqualsBuilder.reflectionEquals(expected.get(i), actual.get(i)));
+        }
     }
 }
 
