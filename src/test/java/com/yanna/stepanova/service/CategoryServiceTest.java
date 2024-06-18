@@ -3,11 +3,11 @@ package com.yanna.stepanova.service;
 import com.yanna.stepanova.dto.category.CategoryDto;
 import com.yanna.stepanova.dto.category.CreateCategoryRequestDto;
 import com.yanna.stepanova.mapper.CategoryMapper;
-import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.model.Category;
 import com.yanna.stepanova.repository.category.CategoryRepository;
 import com.yanna.stepanova.service.impl.CategoryServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,11 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
@@ -130,7 +125,8 @@ class CategoryServiceTest {
                 updatedCategory.getName(), updatedCategory.getDescription());
 
         Mockito.when(categoryRepo.findById(categoryId)).thenReturn(Optional.of(oldCategory));
-        Mockito.when(categoryMapper.updateCategoryFromDto(oldCategory, requestDto)).thenReturn(updatedCategory);
+        Mockito.when(categoryMapper.updateCategoryFromDto(oldCategory, requestDto))
+                .thenReturn(updatedCategory);
         Mockito.when(categoryMapper.toDto(updatedCategory)).thenReturn(expected);
         //when
         CategoryDto actual = categoryService.updateCategory(categoryId, requestDto);

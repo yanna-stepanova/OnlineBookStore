@@ -107,7 +107,7 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Get a book by valid id and requestDto")
+    @DisplayName("Get a book by valid id")
     @WithMockUser(username = "somebody", roles = {"ADMIN, ROLE"})
     public void getBookById_ValidId_Success() throws Exception {
         //given

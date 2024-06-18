@@ -104,7 +104,8 @@ class BookRepositoryTest {
     @Sql(scripts = {"classpath:database/book/repository/add-four-books.sql",
             "classpath:database/book/repository/add-category-for-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/book/repository/remove-all-entities-of-books_categories.sql",
+    @Sql(scripts = {"classpath:"
+            + "database/book/repository/remove-all-entities-of-books_categories.sql",
             "classpath:database/book/repository/remove-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategorySet_Id_ValidCategoryId_Ok() {
