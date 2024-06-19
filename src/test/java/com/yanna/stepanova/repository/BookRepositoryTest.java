@@ -60,8 +60,8 @@ class BookRepositoryTest {
     @Sql(scripts = "classpath:database/book/repository/remove-four-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAll_FiveBooks_Ok() {
-        Page<Book> expected = bookRepo.findAll(PageRequest.of(0, 10));
-        Assertions.assertEquals(expected.getTotalElements(), 5);
+        Page<Book> actual = bookRepo.findAll(PageRequest.of(0, 10));
+        Assertions.assertEquals(5, actual.getTotalElements());
     }
 
     @Test
