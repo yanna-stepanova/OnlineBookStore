@@ -48,7 +48,8 @@ class BookRepositoryTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/book/repository/remove-all-books.sql"));
+                    new ClassPathResource(
+                            "database/book/repository/remove-all-books-and-categories.sql"));
         }
     }
 
