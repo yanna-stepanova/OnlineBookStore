@@ -3,25 +3,24 @@ package com.yanna.stepanova.repository.shoppingcart;
 import com.yanna.stepanova.model.Book;
 import com.yanna.stepanova.model.CartItem;
 import com.yanna.stepanova.model.ShoppingCart;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -34,8 +33,8 @@ class CartItemRepositoryTest {
         teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/cartItem/repository/add-required-data-to-tables.sql"));
+            ScriptUtils.executeSqlScript(connection, new ClassPathResource(
+                    "database/cartItem/repository/add-required-data-to-tables.sql"));
         }
     }
 
@@ -48,8 +47,8 @@ class CartItemRepositoryTest {
     static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/cartItem/repository/clear-all-dependent-tables.sql"));
+            ScriptUtils.executeSqlScript(connection, new ClassPathResource(
+                    "database/cartItem/repository/clear-all-dependent-tables.sql"));
         }
     }
 
@@ -92,8 +91,8 @@ class CartItemRepositoryTest {
 
         Optional<CartItem> actual = cartItemRepo.findByIdAndShoppingCartId(1L, 1L);
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertTrue(
-                EqualsBuilder.reflectionEquals(expected, actual.get(), List.of("shopcart", "book")));
+        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual.get(),
+                List.of("shopcart", "book")));
         Assertions.assertEquals(expected.getShopcart().getId(), actual.get().getShopcart().getId());
         Assertions.assertEquals(expected.getBook().getId(), actual.get().getBook().getId());
     }
