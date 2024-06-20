@@ -10,6 +10,7 @@ import com.yanna.stepanova.model.ShoppingCart;
 import com.yanna.stepanova.repository.book.BookRepository;
 import com.yanna.stepanova.repository.shoppingcart.CartItemRepository;
 import com.yanna.stepanova.service.impl.CartItemServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -38,7 +39,7 @@ class CartItemServiceTest {
     @Test
     @DisplayName("""
             Get correct CartItemDto for valid requestDto""")
-    void save_WithValidRequestDto_ReturnCartItemDto() {
+    public void save_WithValidRequestDto_ReturnCartItemDto() {
         //given
         Long bookId = 1L;
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -81,8 +82,29 @@ class CartItemServiceTest {
 
     @Test
     @DisplayName("""
+            Exception: if save cart item with non-existing book""")
+    public void save_WithNonExistingBook_ReturnException() {
+        //given
+        Long bookId = 100L;
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setId(1L);
+        CreateCartItemRequestDto requestDto = new CreateCartItemRequestDto(bookId, 100);
+        Mockito.when(bookRepo.findById(requestDto.bookId())).thenReturn(Optional.empty());
+        String expected = "Can't find book by id=" + requestDto.bookId();
+        //when
+        try {
+            CartItemDto result = cartItemService.save(requestDto, shoppingCart);
+            Assertions.assertNull(result);
+        } catch (EntityNotFoundException exception) {
+            // then
+            Assertions.assertEquals(expected, exception.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("""
             Get updated CartItemDto by valid id and requestDto""")
-    void updateQuantity_WithValidIdAndRequestDto_ReturnCartItemDto() {
+    public void updateQuantity_WithValidIdAndRequestDto_ReturnCartItemDto() {
         //given
         Long userId = 8L;
         Long cartItemId = 3L;
@@ -119,5 +141,29 @@ class CartItemServiceTest {
         CartItemDto actual = cartItemService.updateQuantity(userId, cartItemId, requestDto);
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+    }
+
+    @Test
+    @DisplayName(""" 
+            Exception: if update non-existing cart item""")
+    public void updateQuantity_WithNonExistingId_ReturnCartItem() {
+        //given
+        Long cartItemId = 18L;
+        Long userId = 1L;
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setId(userId);
+        CartItemQuantityRequestDto requestDto = new CartItemQuantityRequestDto(1);
+        Mockito.when(shoppingCartService.getShopCart(userId)).thenReturn(shoppingCart);
+        Mockito.when(cartItemRepo.findByIdAndShoppingCartId(cartItemId, userId))
+                .thenReturn(Optional.empty());
+        String expected = String.format("Can't find cartItem by id = %s for this user", cartItemId);
+        //when
+        try {
+            CartItemDto result = cartItemService.updateQuantity(userId, cartItemId, requestDto);
+            Assertions.assertNull(result);
+        } catch (EntityNotFoundException exception) {
+            // then
+            Assertions.assertEquals(expected, exception.getMessage());
+        }
     }
 }

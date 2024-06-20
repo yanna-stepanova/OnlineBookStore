@@ -29,7 +29,7 @@ class CartItemRepositoryTest {
     private CartItemRepository cartItemRepo;
 
     @BeforeAll
-    static void beforeAll(@Autowired DataSource dataSource) throws SQLException {
+    public static void beforeAll(@Autowired DataSource dataSource) throws SQLException {
         teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
@@ -39,12 +39,12 @@ class CartItemRepositoryTest {
     }
 
     @AfterAll
-    static void afterAll(@Autowired DataSource dataSource) {
+    public static void afterAll(@Autowired DataSource dataSource) {
         teardown(dataSource);
     }
 
     @SneakyThrows
-    static void teardown(DataSource dataSource) {
+    public static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection, new ClassPathResource(
@@ -55,7 +55,7 @@ class CartItemRepositoryTest {
     @Test
     @DisplayName("""
             Find all four cart_items by shopping_cart""")
-    void findAllByShopCartId_FourCartItems_Ok() {
+    public void findAllByShopCartId_FourCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(2L);
         Assertions.assertEquals(4, actual.size());
     }
@@ -63,7 +63,7 @@ class CartItemRepositoryTest {
     @Test
     @DisplayName("""
             Find all two cart_items by shopping_cart""")
-    void findAllByShopCartId_TwoCartItems_Ok() {
+    public void findAllByShopCartId_TwoCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(1L);
         Assertions.assertEquals(2, actual.size());
     }
@@ -71,7 +71,7 @@ class CartItemRepositoryTest {
     @Test
     @DisplayName("""
             Find nothing by non-existing shopping_cart""")
-    void findAllByShopCartId_ZeroCartItems_Ok() {
+    public void findAllByShopCartId_ZeroCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(53L);
         Assertions.assertEquals(0, actual.size());
     }
@@ -79,7 +79,7 @@ class CartItemRepositoryTest {
     @Test
     @DisplayName("""
             Find cart_item by its existing id and by existing shopping_cart id""")
-    void findByIdAndShoppingCartId_BothValidId_Ok() {
+    public void findByIdAndShoppingCartId_BothValidId_Ok() {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
 
@@ -100,7 +100,7 @@ class CartItemRepositoryTest {
     @Test
     @DisplayName("""
             Find nothing by non-existing cart_item id and by non-existing shopping_cart id""")
-    void findByIdAndShoppingCartId_NonExistingIds_NotOk() {
+    public void findByIdAndShoppingCartId_NonExistingIds_NotOk() {
         Optional<CartItem> actual = cartItemRepo.findByIdAndShoppingCartId(100L, 100L);
         Assertions.assertFalse(actual.isPresent());
     }

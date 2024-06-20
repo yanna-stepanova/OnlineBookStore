@@ -44,7 +44,7 @@ class BookControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    static void beforeAll(@Autowired DataSource dataSource,
+    public static void beforeAll(@Autowired DataSource dataSource,
                           @Autowired WebApplicationContext appContext) throws SQLException {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(appContext)
@@ -60,12 +60,12 @@ class BookControllerTest {
     }
 
     @AfterAll
-    static void afterAll(@Autowired DataSource dataSource) {
+    public static void afterAll(@Autowired DataSource dataSource) {
         teardown(dataSource);
     }
 
     @SneakyThrows
-    static void teardown(DataSource dataSource) {
+    public static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,

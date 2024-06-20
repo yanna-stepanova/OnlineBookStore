@@ -6,6 +6,7 @@ import com.yanna.stepanova.mapper.CategoryMapper;
 import com.yanna.stepanova.model.Category;
 import com.yanna.stepanova.repository.category.CategoryRepository;
 import com.yanna.stepanova.service.impl.CategoryServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -33,7 +34,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("""
             Get correct CategoryDto for valid requestDto""")
-    void save_WithValidRequestDto_ReturnCategoryDto() {
+    public void save_WithValidRequestDto_ReturnCategoryDto() {
         //given
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
                 "New category", "Description of category");
@@ -55,7 +56,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("""
             Get correct CategoryDto for existing category""")
-    void getCategoryById_WithValidId_ReturnCategoryDto() {
+    public void getCategoryById_WithValidId_ReturnCategoryDto() {
         //given
         Long categoryId = 1L;
         Category category = new Category(categoryId);
@@ -74,8 +75,26 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("""
+            Exception: if get CategoryDto for non-existing category id""")
+    public void getCategoryById_WithNonExistingId_ReturnException() {
+        //given
+        Long categoryId = 24L;
+        String expected = String.format("Category with id '%s' wasn't found", categoryId);
+        Mockito.when(categoryRepo.findById(categoryId)).thenReturn(Optional.empty());
+        //when
+        try {
+            CategoryDto result = categoryService.getCategoryById(categoryId);
+            Assertions.assertNull(result);
+        } catch (EntityNotFoundException exception) {
+            // then
+            Assertions.assertEquals(expected, exception.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("""
             Get a list of all CategoryDto""")
-    void getAllWithValidPageable_ReturnAllCategoryDto() {
+    public void getAllWithValidPageable_ReturnAllCategoryDto() {
         //given
         Category category1 = new Category(1L);
         category1.setName("Category one");
@@ -108,7 +127,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("""
             Get updated CategoryDto by valid id""")
-    void updateCategory_WithValidIdAndRequestDto_ReturnCategoryDto() {
+    public void updateCategory_WithValidIdAndRequestDto_ReturnCategoryDto() {
         //given
         Long categoryId = 4L;
         Category oldCategory = new Category(categoryId);

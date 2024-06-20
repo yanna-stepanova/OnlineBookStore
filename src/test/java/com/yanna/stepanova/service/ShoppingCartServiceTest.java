@@ -6,6 +6,7 @@ import com.yanna.stepanova.mapper.ShoppingCartMapper;
 import com.yanna.stepanova.model.ShoppingCart;
 import com.yanna.stepanova.repository.shoppingcart.ShoppingCartRepository;
 import com.yanna.stepanova.service.impl.ShoppingCartServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +30,7 @@ class ShoppingCartServiceTest {
     @Test
     @DisplayName("""
             Get shopping cart by user id""")
-    void getShopCart_WithValidId_ReturnShoppingCart() {
+    public void getShopCart_WithValidId_ReturnShoppingCart() {
         //given
         Long userId = 5L;
         ShoppingCart expected = new ShoppingCart();
@@ -40,6 +41,24 @@ class ShoppingCartServiceTest {
         ShoppingCart actual = shoppingCartService.getShopCart(userId);
         //then
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("""
+            Get exception for non-existing user id""")
+    public void getShopCart_NonExistingId_ReturnException() {
+        // given
+        Long userId = 2L;
+        String expected = "Can't find shopping cart by id:" + userId;
+        Mockito.when(shoppingCartRepo.findById(userId)).thenReturn(Optional.empty());
+        // when
+        try {
+            ShoppingCart result = shoppingCartService.getShopCart(userId);
+            Assertions.assertNull(result);
+        } catch (EntityNotFoundException exception) {
+            // then
+            Assertions.assertEquals(expected, exception.getMessage());
+        }
     }
 
     @Test

@@ -41,7 +41,7 @@ class CategoryControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    static void beforeAll(@Autowired DataSource dataSource,
+    public static void beforeAll(@Autowired DataSource dataSource,
                           @Autowired WebApplicationContext appContext) throws SQLException {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(appContext)
@@ -57,12 +57,12 @@ class CategoryControllerTest {
     }
 
     @AfterAll
-    static void afterAll(@Autowired DataSource dataSource) {
+    public static void afterAll(@Autowired DataSource dataSource) {
         teardown(dataSource);
     }
 
     @SneakyThrows
-    static void teardown(DataSource dataSource) {
+    public static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
@@ -76,7 +76,7 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:database/category/controller/remove-category-by-name.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void createCategory_ValidRequestDto_Success() throws Exception {
+    public void createCategory_ValidRequestDto_Success() throws Exception {
         //given
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
                 "New category", "Description of category");
@@ -98,7 +98,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Get a category by valid id")
     @WithMockUser(username = "somebody", roles = {"ADMIN, ROLE"})
-    void getCategoryById_ValidId_Success() throws Exception {
+    public void getCategoryById_ValidId_Success() throws Exception {
         //given
         Long categoryId = 1L;
         //when
@@ -121,7 +121,8 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:database/category/controller/remove-books-and-books_categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void getBooksByCategoryId_GivenValidId_ReturnBooksDtoWithoutCategoryIds() throws Exception {
+    public void getBooksByCategoryId_GivenValidId_ReturnBooksDtoWithoutCategoryIds()
+            throws Exception {
         //given
         Long categoryId = 2L;
         List<BookDtoWithoutCategoryIds> expected = List.of(
@@ -148,7 +149,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Get all categories")
     @WithMockUser(username = "somebody", roles = {"ADMIN, ROLE"})
-    void getAll_GivenBooksInCatalog_ReturnAllBooks() throws Exception {
+    public void getAll_GivenBooksInCatalog_ReturnAllBooks() throws Exception {
         //given
         List<CategoryDto> expected = getAllCategoriesDto();
         //when
@@ -172,7 +173,7 @@ class CategoryControllerTest {
     @Sql(scripts = "classpath:database/category/controller/remove-updated-category.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void updateCategoryById_GivenValidAndRequestDto_Success() throws Exception {
+    public void updateCategoryById_GivenValidAndRequestDto_Success() throws Exception {
         //given
         Long categoryId = 4L;
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
