@@ -92,12 +92,14 @@ class BookControllerTest {
         expected.setDescription(requestDto.description());
         expected.setCoverImage(requestDto.coverImage());
         expected.setCategoryIds(requestDto.categoryIds());
+
         //when
         MvcResult result = mockMvc.perform(post("/books")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
@@ -112,11 +114,13 @@ class BookControllerTest {
     public void getBookById_ValidId_Success() throws Exception {
         //given
         Long bookId = 1L;
+
         //when
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
@@ -130,6 +134,7 @@ class BookControllerTest {
     public void getBookById_NonExistingId_ThrowException() throws Exception {
         //given
         Long bookId = 40L;
+
         //when
         try {
             MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
@@ -138,6 +143,7 @@ class BookControllerTest {
                     .andReturn();
             BookDto actual = objectMapper.readValue(
                     result.getResponse().getContentAsString(), BookDto.class);
+
             //then
             Assertions.assertNull(actual, String.format("Id=%s should be non-existing", bookId));
         } catch (ServletException exception) {
@@ -153,6 +159,7 @@ class BookControllerTest {
     public void getAllByAuthor_GivenAuthor_Success() throws Exception {
         //given
         String author = "b";
+
         //when
         MvcResult result = mockMvc.perform(get("/books/by-author")
                         .param("author", author)
@@ -164,6 +171,7 @@ class BookControllerTest {
         List<BookDto> expected = getAllBooksDto().stream()
                 .filter(book -> book.getAuthor().toLowerCase().contains(author.toLowerCase()))
                 .toList();
+
         //then
         Assertions.assertEquals(expected.size(), actual.length);
     }
@@ -174,11 +182,13 @@ class BookControllerTest {
     public void getAll_GivenBooksInCatalog_ReturnAllBooks() throws Exception {
         //given
         List<BookDto> expected = getAllBooksDto();
+
         //when
         MvcResult result = mockMvc.perform(get("/books")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         BookDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto[].class);
@@ -204,12 +214,14 @@ class BookControllerTest {
         BookDto expected = new BookDto(bookId, requestDto.title(), requestDto.author(),
                 requestDto.price(), requestDto.isbn(), requestDto.categoryIds(),
                 requestDto.description(), requestDto.coverImage());
+
         //when
         MvcResult result = mockMvc.perform(put("/books/{id}", bookId)
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
@@ -225,6 +237,7 @@ class BookControllerTest {
     public void delete_GivenValidId_Success() throws Exception {
         //given
         Long bookId = 4L;
+
         //when & then
         mockMvc.perform(delete("/books/{id}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))

@@ -37,8 +37,7 @@ class BookServiceTest {
     private BookServiceImpl bookService;
 
     @Test
-    @DisplayName("""
-            Get correct BookDto for valid requestDto""")
+    @DisplayName("Get correct BookDto for valid requestDto")
     public void save_WithValidRequestDto_ReturnBookDto() {
         //given
         CreateBookRequestDto requestDto = new CreateBookRequestDto("Title 1", "Writer 1",
@@ -69,15 +68,16 @@ class BookServiceTest {
         Mockito.when(bookMapper.toModel(requestDto)).thenReturn(book);
         Mockito.when(bookRepo.save(book)).thenReturn(book);
         Mockito.when(bookMapper.toDto(book)).thenReturn(expected);
+
         //when
         BookDto actual = bookService.save(requestDto);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Get correct BookDto for existing book""")
+    @DisplayName("Get correct BookDto for existing book")
     public void getBookById_WithValidId_ReturnBookDto() {
         //given
         Long bookId = 1L;
@@ -103,22 +103,25 @@ class BookServiceTest {
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
         Mockito.when(bookMapper.toDto(book)).thenReturn(expected);
+
         //when
         BookDto actual = bookService.getBookById(bookId);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Get an exception when trying to get a book by invalid id""")
+    @DisplayName("Get an exception when trying to get a book by invalid id")
     public void getBookById_WithInvalidId_ThrowException() {
         //given
         Long bookId = -1L;
         Mockito.when(bookRepo.findById(bookId)).thenReturn(Optional.empty());
+
         //when
         Exception exception = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> bookService.getBookById(bookId));
+
         //then
         String expected = String.format("Book with id: %s not found", bookId);
         String actual = exception.getMessage();
@@ -126,8 +129,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get a list of BookDto by author""")
+    @DisplayName("Get a list of BookDto by author")
     public void getAllByAuthor_WithValidAuthor_ReturnListBookDto() {
         //given
         String author = "Writer_1";
@@ -159,6 +161,7 @@ class BookServiceTest {
         //when
         List<BookDto> expected = List.of(bookDto);
         List<BookDto> actual = bookService.getAllByAuthor(author);
+
         //then
         for (int i = 0; i < expected.size(); i++) {
             Assertions.assertTrue(
@@ -167,8 +170,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get a list of all BookDto""")
+    @DisplayName("Get a list of all BookDto")
     public void getAll_WithValidPageable_ReturnAllBookDto() {
         //given
         Book book1 = new Book(1L);
@@ -216,9 +218,11 @@ class BookServiceTest {
         Mockito.when(bookRepo.findAll(pageable)).thenReturn(bookPage);
         Mockito.when(bookMapper.toDto(book1)).thenReturn(bookDto1);
         Mockito.when(bookMapper.toDto(book2)).thenReturn(bookDto2);
+
         //when
         List<BookDto> expected = List.of(bookDto1, bookDto2);
         List<BookDto> actual = bookService.getAll(pageable);
+
         //then
         for (int i = 0; i < expected.size(); i++) {
             Assertions.assertTrue(
@@ -227,8 +231,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get updated BookDto by valid id""")
+    @DisplayName("Get updated BookDto by valid id")
     public void updateBook_WithValidIdAndRequestDto_ReturnBookDto() {
         //given
         Long bookId = 7L;
@@ -270,15 +273,16 @@ class BookServiceTest {
         Mockito.when(bookRepo.findById(bookId)).thenReturn(Optional.of(oldBook));
         Mockito.when(bookMapper.updateBookFromDto(oldBook, requestDto)).thenReturn(updatedBook);
         Mockito.when(bookMapper.toDto(updatedBook)).thenReturn(expected);
+
         //when
         BookDto actual = bookService.updateBook(bookId, requestDto);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Get an exception when trying to update a book by invalid id""")
+    @DisplayName("Get an exception when trying to update a book by invalid id")
     public void updateBook_WithInvalidId_ThrowException() {
         //given
         Long bookId = 10L;
@@ -286,9 +290,11 @@ class BookServiceTest {
                 "000-00-12345678", BigDecimal.valueOf(1.23), Set.of(1L, 2L),
                 "Update description", "Update cover image");
         Mockito.when(bookRepo.findById(bookId)).thenReturn(Optional.empty());
+
         //when
         Exception exception = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> bookService.updateBook(bookId, requestDto));
+
         //then
         String expected = "Can't get book by id = " + bookId;
         String actual = exception.getMessage();
@@ -296,8 +302,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get all books without category id by valid category id""")
+    @DisplayName("Get all books without category id by valid category id")
     public void getAllByCategoryId_WithValidCategoryId_ReturnAllBookDtoWithoutCategoryIds() {
         //given
         Long categoryId = 1L;
@@ -329,10 +334,12 @@ class BookServiceTest {
         Mockito.when(bookRepo.findAllByCategorySet_Id(categoryId, pageable)).thenReturn(bookList);
         Mockito.when(bookMapper.toDtoWithoutCategories(book1)).thenReturn(bookDtoWithout1);
         Mockito.when(bookMapper.toDtoWithoutCategories(book2)).thenReturn(bookDtoWithout2);
+
         //when
         List<BookDtoWithoutCategoryIds> expected = List.of(bookDtoWithout1, bookDtoWithout2);
         List<BookDtoWithoutCategoryIds> actual = bookService.getAllByCategoryId(categoryId,
                 pageable);
+
         //then
         for (int i = 0; i < expected.size(); i++) {
             Assertions.assertTrue(
@@ -340,4 +347,3 @@ class BookServiceTest {
         }
     }
 }
-

@@ -28,8 +28,7 @@ class ShoppingCartServiceTest {
     private ShoppingCartServiceImpl shoppingCartService;
 
     @Test
-    @DisplayName("""
-            Get shopping cart by user id""")
+    @DisplayName("Get shopping cart by user id")
     public void getShopCart_WithValidId_ReturnShoppingCart() {
         //given
         Long userId = 5L;
@@ -37,6 +36,7 @@ class ShoppingCartServiceTest {
         expected.setId(userId);
 
         Mockito.when(shoppingCartRepo.findById(userId)).thenReturn(Optional.of(expected));
+
         //when
         ShoppingCart actual = shoppingCartService.getShopCart(userId);
         //then
@@ -44,13 +44,13 @@ class ShoppingCartServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get exception for non-existing user id""")
+    @DisplayName("Get exception for non-existing user id")
     public void getShopCart_NonExistingId_ReturnException() {
         // given
         Long userId = 2L;
         String expected = "Can't find shopping cart by id:" + userId;
         Mockito.when(shoppingCartRepo.findById(userId)).thenReturn(Optional.empty());
+
         // when
         try {
             ShoppingCart result = shoppingCartService.getShopCart(userId);
@@ -62,9 +62,8 @@ class ShoppingCartServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get correct ShoppingCartDto by user id""")
-    void getShopCartDto_WithValidId_ReturnShoppingCartDto() {
+    @DisplayName("Get correct ShoppingCartDto by user id")
+    public void getShopCartDto_WithValidId_ReturnShoppingCartDto() {
         //given
         Long userId = 3L;
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -75,8 +74,10 @@ class ShoppingCartServiceTest {
                        new CartItemDto(2L, 20L, "Antiquarian book", 1)));
         Mockito.when(shoppingCartRepo.findById(userId)).thenReturn(Optional.of(shoppingCart));
         Mockito.when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(expected);
+
         //when
         ShoppingCartDto actual = shoppingCartService.getShopCartDto(userId);
+
         //then
         Assertions.assertEquals(expected,actual);
     }

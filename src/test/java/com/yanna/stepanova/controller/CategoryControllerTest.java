@@ -81,12 +81,14 @@ class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
                 "New category", "Description of category");
         CategoryDto expected = new CategoryDto(null, requestDto.name(), requestDto.description());
+
         //when
         MvcResult result = mockMvc.perform(post("/categories")
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CategoryDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryDto.class);
@@ -101,11 +103,13 @@ class CategoryControllerTest {
     public void getCategoryById_ValidId_Success() throws Exception {
         //given
         Long categoryId = 1L;
+
         //when
         MvcResult result = mockMvc.perform(get("/categories/{id}", categoryId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CategoryDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryDto.class);
@@ -132,11 +136,13 @@ class CategoryControllerTest {
                 new BookDtoWithoutCategoryIds(8L, "Second title", "Writer B",
                         BigDecimal.valueOf(112.04), "000-00-00000020","Book 2",
                         "http://example.com/cover_2.jpg"));
+
         //when
         MvcResult result = mockMvc.perform(get("/categories/{id}/books", categoryId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         BookDtoWithoutCategoryIds[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDtoWithoutCategoryIds[].class);
@@ -152,11 +158,13 @@ class CategoryControllerTest {
     public void getAll_GivenBooksInCatalog_ReturnAllBooks() throws Exception {
         //given
         List<CategoryDto> expected = getAllCategoriesDto();
+
         //when
         MvcResult result = mockMvc.perform(get("/categories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CategoryDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryDto[].class);
@@ -180,12 +188,14 @@ class CategoryControllerTest {
                 "Update category", "Description of updated category");
         CategoryDto expected = new CategoryDto(categoryId,
                 requestDto.name(), requestDto.description());
+
         //when
         MvcResult result = mockMvc.perform(put("/categories/{id}", categoryId)
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CategoryDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryDto.class);

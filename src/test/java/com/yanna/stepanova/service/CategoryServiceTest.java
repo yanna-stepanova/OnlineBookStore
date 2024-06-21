@@ -32,8 +32,7 @@ class CategoryServiceTest {
     private CategoryServiceImpl categoryService;
 
     @Test
-    @DisplayName("""
-            Get correct CategoryDto for valid requestDto""")
+    @DisplayName("Get correct CategoryDto for valid requestDto")
     public void save_WithValidRequestDto_ReturnCategoryDto() {
         //given
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
@@ -47,15 +46,16 @@ class CategoryServiceTest {
         Mockito.when(categoryMapper.toModel(requestDto)).thenReturn(category);
         Mockito.when(categoryRepo.save(category)).thenReturn(category);
         Mockito.when(categoryMapper.toDto(category)).thenReturn(expected);
+
         //when
         CategoryDto actual = categoryService.save(requestDto);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Get correct CategoryDto for existing category""")
+    @DisplayName("Get correct CategoryDto for existing category")
     public void getCategoryById_WithValidId_ReturnCategoryDto() {
         //given
         Long categoryId = 1L;
@@ -67,20 +67,22 @@ class CategoryServiceTest {
                 category.getName(), category.getDescription());
         Mockito.when(categoryRepo.findById(categoryId)).thenReturn(Optional.of(category));
         Mockito.when(categoryMapper.toDto(category)).thenReturn(expected);
+
         //when
         CategoryDto actual = categoryService.getCategoryById(categoryId);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Exception: if get CategoryDto for non-existing category id""")
+    @DisplayName("Exception: if get CategoryDto for non-existing category id")
     public void getCategoryById_WithNonExistingId_ReturnException() {
         //given
         Long categoryId = 24L;
         String expected = String.format("Category with id '%s' wasn't found", categoryId);
         Mockito.when(categoryRepo.findById(categoryId)).thenReturn(Optional.empty());
+
         //when
         try {
             CategoryDto result = categoryService.getCategoryById(categoryId);
@@ -92,8 +94,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get a list of all CategoryDto""")
+    @DisplayName("Get a list of all CategoryDto")
     public void getAllWithValidPageable_ReturnAllCategoryDto() {
         //given
         Category category1 = new Category(1L);
@@ -114,9 +115,11 @@ class CategoryServiceTest {
         Mockito.when(categoryRepo.findAll(pageable)).thenReturn(categoryPage);
         Mockito.when(categoryMapper.toDto(category1)).thenReturn(categoryDto1);
         Mockito.when(categoryMapper.toDto(category2)).thenReturn(categoryDto2);
+
         //when
         List<CategoryDto> expected = List.of(categoryDto1, categoryDto2);
         List<CategoryDto> actual = categoryService.getAll(pageable);
+
         //then
         for (int i = 0; i < expected.size(); i++) {
             Assertions.assertTrue(
@@ -125,8 +128,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get updated CategoryDto by valid id""")
+    @DisplayName("Get updated CategoryDto by valid id")
     public void updateCategory_WithValidIdAndRequestDto_ReturnCategoryDto() {
         //given
         Long categoryId = 4L;
@@ -147,8 +149,10 @@ class CategoryServiceTest {
         Mockito.when(categoryMapper.updateCategoryFromDto(oldCategory, requestDto))
                 .thenReturn(updatedCategory);
         Mockito.when(categoryMapper.toDto(updatedCategory)).thenReturn(expected);
+
         //when
         CategoryDto actual = categoryService.updateCategory(categoryId, requestDto);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }

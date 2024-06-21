@@ -53,32 +53,28 @@ class CartItemRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-            Find all four cart_items by shopping_cart""")
+    @DisplayName("Find all four cart_items by shopping_cart")
     public void findAllByShopCartId_FourCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(2L);
         Assertions.assertEquals(4, actual.size());
     }
 
     @Test
-    @DisplayName("""
-            Find all two cart_items by shopping_cart""")
+    @DisplayName("Find all two cart_items by shopping_cart")
     public void findAllByShopCartId_TwoCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(1L);
         Assertions.assertEquals(2, actual.size());
     }
 
     @Test
-    @DisplayName("""
-            Find nothing by non-existing shopping_cart""")
+    @DisplayName("Find nothing by non-existing shopping_cart")
     public void findAllByShopCartId_ZeroCartItems_Ok() {
         Set<CartItem> actual = cartItemRepo.findAllByShopCartId(53L);
         Assertions.assertEquals(0, actual.size());
     }
 
     @Test
-    @DisplayName("""
-            Find cart_item by its existing id and by existing shopping_cart id""")
+    @DisplayName("Find cart_item by its existing id and by existing shopping_cart id")
     public void findByIdAndShoppingCartId_BothValidId_Ok() {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
@@ -98,8 +94,7 @@ class CartItemRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-            Find nothing by non-existing cart_item id and by non-existing shopping_cart id""")
+    @DisplayName("Find nothing by non-existing cart_item id and by non-existing shopping_cart id")
     public void findByIdAndShoppingCartId_NonExistingIds_NotOk() {
         Optional<CartItem> actual = cartItemRepo.findByIdAndShoppingCartId(100L, 100L);
         Assertions.assertFalse(actual.isPresent());

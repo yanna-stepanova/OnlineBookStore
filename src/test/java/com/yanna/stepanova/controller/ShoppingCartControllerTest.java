@@ -87,12 +87,14 @@ class ShoppingCartControllerTest {
 
         CartItemDto expected = new CartItemDto(1L, book.getId(), book.getTitle(),
                 requestDto.quantity());
+
         //when
         MvcResult result = mockMvc.perform(post("/cart")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CartItemDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CartItemDto.class);
@@ -114,11 +116,13 @@ class ShoppingCartControllerTest {
         ShoppingCartDto expected = new ShoppingCartDto(userId, 
                 Set.of(new CartItemDto(1L, 1L, "Title of first test book", 17),
                        new CartItemDto(2L, 2L, "Title of second test book", 14)));
+
         //when
         MvcResult result = mockMvc.perform(get("/cart")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         ShoppingCartDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), ShoppingCartDto.class);
@@ -149,12 +153,14 @@ class ShoppingCartControllerTest {
         CartItemQuantityRequestDto requestDto = new CartItemQuantityRequestDto(100);
         CartItemDto expected = new CartItemDto(cartItemId, 2L,
                 "Title of second test book", requestDto.quantity());
+
         //when
         MvcResult result = mockMvc.perform(put("/cart/cart-items/{id}", cartItemId)
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
         //then
         CartItemDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CartItemDto.class);

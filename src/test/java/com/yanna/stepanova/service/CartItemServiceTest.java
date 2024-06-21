@@ -37,8 +37,7 @@ class CartItemServiceTest {
     private CartItemServiceImpl cartItemService;
 
     @Test
-    @DisplayName("""
-            Get correct CartItemDto for valid requestDto""")
+    @DisplayName("Get correct CartItemDto for valid requestDto")
     public void save_WithValidRequestDto_ReturnCartItemDto() {
         //given
         Long bookId = 1L;
@@ -74,15 +73,16 @@ class CartItemServiceTest {
         Mockito.when(cartItemRepo.findAllByShopCartId(shoppingCart.getId()))
                 .thenReturn(Set.of(savedCartItem));
         Mockito.when(cartItemMapper.toDto(savedCartItem)).thenReturn(expected);
+
         //when
         CartItemDto actual = cartItemService.save(requestDto, shoppingCart);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName("""
-            Exception: if save cart item with non-existing book""")
+    @DisplayName("Exception: if save cart item with non-existing book")
     public void save_WithNonExistingBook_ReturnException() {
         //given
         Long bookId = 100L;
@@ -91,6 +91,7 @@ class CartItemServiceTest {
         CreateCartItemRequestDto requestDto = new CreateCartItemRequestDto(bookId, 100);
         Mockito.when(bookRepo.findById(requestDto.bookId())).thenReturn(Optional.empty());
         String expected = "Can't find book by id=" + requestDto.bookId();
+
         //when
         try {
             CartItemDto result = cartItemService.save(requestDto, shoppingCart);
@@ -102,8 +103,7 @@ class CartItemServiceTest {
     }
 
     @Test
-    @DisplayName("""
-            Get updated CartItemDto by valid id and requestDto""")
+    @DisplayName("Get updated CartItemDto by valid id and requestDto")
     public void updateQuantity_WithValidIdAndRequestDto_ReturnCartItemDto() {
         //given
         Long userId = 8L;
@@ -137,15 +137,16 @@ class CartItemServiceTest {
                 .thenReturn(Optional.of(cartItem));
         Mockito.when(cartItemRepo.save(cartItem)).thenReturn(updatedCartItem);
         Mockito.when(cartItemMapper.toDto(updatedCartItem)).thenReturn(expected);
+
         //when
         CartItemDto actual = cartItemService.updateQuantity(userId, cartItemId, requestDto);
+
         //then
         Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
     }
 
     @Test
-    @DisplayName(""" 
-            Exception: if update non-existing cart item""")
+    @DisplayName("Exception: if update non-existing cart item")
     public void updateQuantity_WithNonExistingId_ReturnCartItem() {
         //given
         Long cartItemId = 18L;
@@ -157,6 +158,7 @@ class CartItemServiceTest {
         Mockito.when(cartItemRepo.findByIdAndShoppingCartId(cartItemId, userId))
                 .thenReturn(Optional.empty());
         String expected = String.format("Can't find cartItem by id = %s for this user", cartItemId);
+
         //when
         try {
             CartItemDto result = cartItemService.updateQuantity(userId, cartItemId, requestDto);

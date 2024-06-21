@@ -54,8 +54,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-            Find all five books""")
+    @DisplayName(" all five books")
     @Sql(scripts = "classpath:database/book/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/book/repository/remove-four-books.sql",
@@ -66,22 +65,19 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName(""" 
-            Find a default book by id""")
+    @DisplayName("Find a default book by id")
     public void findById_DefaultBook_Ok() {
         Assertions.assertTrue(bookRepo.findById(1L).isPresent());
     }
 
     @Test
-    @DisplayName(""" 
-            Find a non-existing book by id""")
+    @DisplayName("Find a non-existing book by id")
     public void findById_NonExistingBook_notOk() {
         Assertions.assertFalse(bookRepo.findById(2L).isPresent());
     }
 
     @Test
-    @DisplayName("""
-            Find books by existing author""")
+    @DisplayName("Find books by existing author")
     @Sql(scripts = "classpath:database/book/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/book/repository/remove-four-books.sql",
@@ -92,16 +88,14 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-            Find books by non-existing author""")
+    @DisplayName("Find books by non-existing author")
     public void findAllByAuthorContainsIgnoreCase_NonExistingAuthor_Ok() {
         List<Book> expected = bookRepo.findAllByAuthorContainsIgnoreCase(AUTHOR);
         Assertions.assertTrue(expected.isEmpty());
     }
 
     @Test
-    @DisplayName("""
-            Find all books by valid category id""")
+    @DisplayName("Find all books by valid category id")
     @Sql(scripts = {"classpath:database/book/repository/add-four-books.sql",
             "classpath:database/book/repository/add-category-for-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -115,8 +109,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-            Get empty list of book by valid category id and empty table 'books_categories'""")
+    @DisplayName("Get empty list of book by valid category id and empty table 'books_categories'")
     public void findAllByCategorySet_Id_ValidCategoryIdAndEmptyTable_Ok() {
         List<Book> expected = bookRepo.findAllByCategorySet_Id(2L, PageRequest.of(0, 10));
         Assertions.assertTrue(expected.isEmpty());
