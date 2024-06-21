@@ -29,7 +29,7 @@ class BookRepositoryTest {
     private BookRepository bookRepo;
 
     @BeforeAll
-    static void beforeAll(@Autowired DataSource dataSource) throws SQLException {
+    public static void beforeAll(@Autowired DataSource dataSource) throws SQLException {
         teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
@@ -39,68 +39,63 @@ class BookRepositoryTest {
     }
 
     @AfterAll
-    static void afterAll(@Autowired DataSource dataSource) {
+    public static void afterAll(@Autowired DataSource dataSource) {
         teardown(dataSource);
     }
 
     @SneakyThrows
-    static void teardown(DataSource dataSource) {
+    public static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/book/repository/remove-all-books.sql"));
+                    new ClassPathResource(
+                            "database/book/repository/remove-all-books-and-categories.sql"));
         }
     }
 
     @Test
-    @DisplayName("""
-            Find all five books""")
+    @DisplayName(" all five books")
     @Sql(scripts = "classpath:database/book/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/book/repository/remove-four-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAll_FiveBooks_Ok() {
-        Page<Book> expected = bookRepo.findAll(PageRequest.of(0, 10));
-        Assertions.assertEquals(expected.getTotalElements(), 5);
+    public void findAll_FiveBooks_Ok() {
+        Page<Book> actual = bookRepo.findAll(PageRequest.of(0, 10));
+        Assertions.assertEquals(5, actual.getTotalElements());
     }
 
     @Test
-    @DisplayName(""" 
-            Find a default book by id""")
-    void findById_DefaultBook_Ok() {
+    @DisplayName("Find a default book by id")
+    public void findById_DefaultBook_Ok() {
         Assertions.assertTrue(bookRepo.findById(1L).isPresent());
     }
 
     @Test
-    @DisplayName(""" 
-            Find a non-existing book by id""")
-    void findById_NonExistingBook_notOk() {
+    @DisplayName("Find a non-existing book by id")
+    public void findById_NonExistingBook_notOk() {
         Assertions.assertFalse(bookRepo.findById(2L).isPresent());
     }
 
     @Test
-    @DisplayName("""
-            Find books by existing author""")
+    @DisplayName("Find books by existing author")
     @Sql(scripts = "classpath:database/book/repository/add-four-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/book/repository/remove-four-books.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAllByAuthorContainsIgnoreCase_ExistingAuthor_Ok() {
+    public void findAllByAuthorContainsIgnoreCase_ExistingAuthor_Ok() {
         List<Book> expected = bookRepo.findAllByAuthorContainsIgnoreCase(AUTHOR);
         Assertions.assertEquals(expected.size(), 4);
     }
 
     @Test
-    @DisplayName("""
-            Find books by non-existing author""")
-    void findAllByAuthorContainsIgnoreCase_NonExistingAuthor_Ok() {
+    @DisplayName("Find books by non-existing author")
+    public void findAllByAuthorContainsIgnoreCase_NonExistingAuthor_Ok() {
         List<Book> expected = bookRepo.findAllByAuthorContainsIgnoreCase(AUTHOR);
         Assertions.assertTrue(expected.isEmpty());
     }
 
     @Test
-    @DisplayName("""
-            Find all books by valid category id""")
+    @DisplayName("Find all books by valid category id")
     @Sql(scripts = {"classpath:database/book/repository/add-four-books.sql",
             "classpath:database/book/repository/add-category-for-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -108,15 +103,14 @@ class BookRepositoryTest {
             + "database/book/repository/remove-all-entities-of-books_categories.sql",
             "classpath:database/book/repository/remove-four-books.sql"},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAllByCategorySet_Id_ValidCategoryId_Ok() {
+    public void findAllByCategorySet_Id_ValidCategoryId_Ok() {
         List<Book> expected = bookRepo.findAllByCategorySet_Id(2L, PageRequest.of(0, 10));
         Assertions.assertEquals(expected.size(), 4);
     }
 
     @Test
-    @DisplayName("""
-            Get empty list of book by valid category id and empty table 'books_categories'""")
-    void findAllByCategorySet_Id_ValidCategoryIdAndEmptyTable_Ok() {
+    @DisplayName("Get empty list of book by valid category id and empty table 'books_categories'")
+    public void findAllByCategorySet_Id_ValidCategoryIdAndEmptyTable_Ok() {
         List<Book> expected = bookRepo.findAllByCategorySet_Id(2L, PageRequest.of(0, 10));
         Assertions.assertTrue(expected.isEmpty());
     }

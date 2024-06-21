@@ -27,9 +27,9 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemDto save(CreateCartItemRequestDto requestDto, ShoppingCart shopCart) {
-        CartItem cartItem = cartItemMapper.toModel(requestDto);
-        Book bookFromDB = bookRepo.findById(cartItem.getBook().getId()).orElseThrow(() ->
+        Book bookFromDB = bookRepo.findById(requestDto.bookId()).orElseThrow(() ->
                 new EntityNotFoundException("Can't find book by id=" + requestDto.bookId()));
+        CartItem cartItem = cartItemMapper.toModel(requestDto);
         cartItem.setBook(bookFromDB);
         cartItem.setShopcart(shopCart);
         CartItem savedCartItem = cartItemRepo.save(cartItem);
