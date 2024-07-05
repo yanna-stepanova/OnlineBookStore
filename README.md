@@ -1,4 +1,4 @@
-<h1 style="color: #5e9ca0;">This is a simple <span style="color: #2b2301;">Online BookStore</span> service.</h1>
+<h1 style="color: #5e9ca0;">A simple Online BookStore service.</h1>
 <p>Nowadays, it's very popular to use web services. That's why this project was built using MVC web infrastructure (Spring Web MVC).<br>There are implemented services for online book shopping. Book objects are stored in a MySQL database which was configured based on Liquibase scripts. and are accessed through Spring JPA. The Spring Web model-view-controller (MVC) layer allows access over the internet using RESTful API.</p>
 <h3 style="color: #2e6c80;">The technologies and tools used:</h3>
 
@@ -52,6 +52,24 @@
   </tbody>
 </table>
 
-<pre><code class="java">
-  
+<pre><code class="java">  
 </code></pre><br>
+<p>The structure of this application is built on the <abbr title="Model View Controller">MVC</abbr>  pattern.</p>
+<img src="/img/diagram_mvc.png" alt="Diagram of pattern MVC" style="width:605px;height:392px;">  
+<p>There are the following components:</p>
+ <ol>
+  <li><i>Model</i> : it's the most independent part. The Model doesn't need to know anything about the View and Controller components. This component stores data and logic. For instance, a Controller object will retrieve customer information from a database. Data is transferred between the controller components or between business logic elements.</li>
+  <li><i>View</i> : this component provides information from the Model in a user-friendly format. The View mustn't change the model, because it is created based on the data collected from the model.</li>
+  <li><i>Controller</i> : it processes the user's actions. The user makes changes to the data that is stored in the model through the Controller.</li>
+ </ol>
+<p> In this app the models (entities) are:</p>
+ <ul>
+        <li><u>User</u>: Contains information about the registered user including their authentication details and personal information. </li>
+        <li><u>Role</u>: Represents the role of a user in the system, for example, admin or user.</li>
+        <li><u>Book</u>: Represents a book available in the store.</li>
+        <li><u>Category</u>: Represents a category that a book can belong to.</li>
+        <li><u>ShoppingCart</u>: Represents a user's shopping cart.</li>
+        <li><u>CartItem</u>: Represents an item in a user's shopping cart.</li>
+        <li><u>Order</u>: Represents an order placed by a user.</li>
+        <li><u>OrderItem</u>: Represents an item in a user's order.</li>
+ </ul>
