@@ -1,13 +1,15 @@
 <h1 style="color: #5e9ca0;">A simple Online BookStore service.</h1>
 <p>Nowadays, it's very popular to use web services. That's why this project was built using MVC web infrastructure (Spring Web MVC).<br>There are implemented services for online book shopping. Book objects are stored in a MySQL database which was configured based on Liquibase scripts. and are accessed through Spring JPA. The Spring Web model-view-controller (MVC) layer allows access over the internet using RESTful API.</p>
 <h3 style="color: #2e6c80;">The technologies and tools used:</h3>
-
-
 <table>
   <tbody>
     <tr>
       <td>Lombok</td>
       <td>This is a Java library that automatically plugs into your editor and builds tools, spicing up your Java. Never write another getter or equals method again, with one annotation your class has a fully featured builder, automates your logging variables, and much more...</td>
+    </tr>
+    <tr>
+      <td>MapStruct</td>
+      <td>This is a Java annotation processor for the generation of type-safe and performant mappers for Java bean classes.</td>
     </tr>
     <tr>
       <td>Spring Data JPA</td>
@@ -51,9 +53,6 @@
     </tr>
   </tbody>
 </table>
-
-<pre><code class="java">  
-</code></pre><br>
 <p>The structure of this application is built on the <abbr title="Model View Controller">MVC</abbr>  pattern.</p>
 <img src="/img/diagram_mvc.png" alt="Diagram of pattern MVC" style="width:605px;height:392px;">  
 <p>There are the following components:</p>
@@ -64,12 +63,49 @@
  </ol>
 <p> In this app the models (entities) are:</p>
  <ul>
-        <li><u>User</u>: Contains information about the registered user including their authentication details and personal information. </li>
-        <li><u>Role</u>: Represents the role of a user in the system, for example, admin or user.</li>
-        <li><u>Book</u>: Represents a book available in the store.</li>
-        <li><u>Category</u>: Represents a category that a book can belong to.</li>
-        <li><u>ShoppingCart</u>: Represents a user's shopping cart.</li>
-        <li><u>CartItem</u>: Represents an item in a user's shopping cart.</li>
-        <li><u>Order</u>: Represents an order placed by a user.</li>
-        <li><u>OrderItem</u>: Represents an item in a user's order.</li>
+    <li><u>User</u>: Contains information about the registered user including their authentication details and personal information. </li>
+    <li><u>Role</u>: Represents the role of a user in the system, for example, admin or user.</li>
+    <li><u>Book</u>: Represents a book available in the store.</li>
+    <li><u>Category</u>: Represents a category that a book can belong to.</li>
+    <li><u>ShoppingCart</u>: Represents a user's shopping cart.</li>
+    <li><u>CartItem</u>: Represents an item in a user's shopping cart.</li>
+    <li><u>Order</u>: Represents an order placed by a user.</li>
+    <li><u>OrderItem</u>: Represents an item in a user's order.</li>
  </ul>
+<p>An example of a view is a response to a request in Postman:</p>
+<pre><code class="language-json">[
+    {
+        "id": 2,
+        "title": "Cinder",
+        "author": "Marissa Meyer",
+        "price": 306.00,
+        "isbn": "2982541266483",
+        "categoryIds": [
+            2,
+            3
+        ],
+        "description": "The Lunar Chronicles. Part 1",
+        "coverImage": "http://example.com/cover_Cinder.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Scarlet",
+        "author": "Marissa Meyer",
+        "price": 307.00,
+        "isbn": "8367285222976",
+        "categoryIds": [
+            2
+        ],
+        "description": "The Lunar Chronicles. Part 2",
+        "coverImage": "http://example.com/cover_Scarlet.jpg"
+    }
+]
+</code></pre>
+<p>There're 5 controllers:</p>
+<ul>
+    <li><u>AuthenticationController</u> is indicated possible actions for the user: registration and login.</li>
+    <li><u>BookController</u> gives the user access to the available assortment of books, and the admin has more advanced access(creating, updating and deleting a book).</li>
+    <li><u>CategoryController</u> helps the user organize the books and the admin can manage the categories(create/update/delete)</li>
+    <li><u>ShoppingCartController</u> allows the user (not admin!) to add books to their basket and edit their number or delete them from it.</li>
+    <li><u>OrderController</u> can form new order just for users from their basket, can control order's status and give an information about all user's orders or certain order.</li>    
+</ul>
