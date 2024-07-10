@@ -1,15 +1,39 @@
 @startuml
-skinparam groupInterface 2
 
-interface UserDetails
-interface GrantedAuthority
-
-class Role implements GrantedAuthority {
+class Category {
 - id : Long
-- name : RoleName
+- name : String
+- description : String
+- isDeleted : boolean
 }
 
-class User implements UserDetails {
+class CartItem {
+- id : Long
+- shopcart : ShoppingCart
+- book : Book
+- quantity : int
+}
+
+class ShoppingCart {
+- id : Long
+- user : User
+- isDeleted : boolean
+- cartItems : Set<CartItem>
+}
+
+class Book {
+- id : Long
+- title : String
+- author : String
+- isbn : String
+- price : BigDecimal
+- description : String
+- coverImage : String
+- isDeleted : boolean
+- categorySet : Set<Category>
+}
+
+class User {
 - id : Long
 - email : String
 - password : String
@@ -19,6 +43,41 @@ class User implements UserDetails {
 - isDeleted : boolean
 - roles : Set<Role>
 }
+
+class OrderItem {
+- id : Long
+- order : Order
+- book : Book
+- quantity : BigDecimal
+- price : BigDecimal
+- isDeleted : boolean
+}
+
+
+
+
+
+
+
+
+interface UserDetails
+interface GrantedAuthority
+
+class Role {
+- id : Long
+- name : RoleName
+}
+
+class Order {
+- id : Long
+- user : User
+- status : Status
+- total : BigDecimal
+- shippingAddress : String
+- orderItems : Set<OrderItem>
+- isDeleted : boolean
+}
+
 
 enum Status {
 PENDING
@@ -32,10 +91,22 @@ ROLE_MANAGER
 ROLE_ADMIN
 }
 
-Role "*" -o "*" User
-
-
+Category "n" -o "n" Book
+CartItem "n" o-- "1" Book
+CartItem "n" -o "1" ShoppingCart
+ShoppingCart "1" --* "1" User
+Book "1" --o "n" OrderItem
+OrderItem "n" -o "1" Order
+User "1" --o "n" Order
+CartItem ...> OrderItem : create
+ShoppingCart ...> Order : create
+User "n" o- "n" Role
+UserDetails <|.. User
+GrantedAuthority <|.. Role
 note "org.springframework.security.core" as MyNote
-MyNote . UserDetails
-GrantedAuthority . MyNote
+MyNote . GrantedAuthority
+UserDetails . MyNote
+Role <.. RoleName
+Order <. Status
+
 @enduml
