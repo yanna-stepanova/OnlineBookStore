@@ -1,0 +1,41 @@
+@startuml
+skinparam groupInterface 2
+
+interface UserDetails
+interface GrantedAuthority
+
+class Role implements GrantedAuthority {
+- id : Long
+- name : RoleName
+}
+
+class User implements UserDetails {
+- id : Long
+- email : String
+- password : String
+- firstName : String
+- lastName : String
+- shippingAddress : String
+- isDeleted : boolean
+- roles : Set<Role>
+}
+
+enum Status {
+PENDING
+DELIVERED
+COMPLETED
+}
+
+enum RoleName {
+ROLE_USER
+ROLE_MANAGER
+ROLE_ADMIN
+}
+
+Role "*" -o "*" User
+
+
+note "org.springframework.security.core" as MyNote
+MyNote . UserDetails
+GrantedAuthority . MyNote
+@enduml
