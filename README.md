@@ -109,3 +109,13 @@
     <li><u>ShoppingCartController</u> allows the user (not admin!) to add books to their basket and edit their number or delete them from it.</li>
     <li><u>OrderController</u> can form new order just for users from their basket, can control order's status and give an information about all user's orders or certain order.</li>    
 </ul>
+<p>UML diagram of models was created using the plugin "PlantUml Integration":</p>
+<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:1100px;height:600px;">  
+<p>Using Swagger UI we have the visual documentation that makes it easy for back-end implementation and client-side consumption.Type in your browser 'http://localhost:8080/api/swagger-ui/index.html', when this application is running. In the beginning, it is appeared an authentication window:</p>
+<img src="/img/auth.png" alt="Authentication window of the user" style="width:398px;height:315px;">  
+<p>After successful authentication you can see all endpoints of this application.</p>
+<img src="/img/swagger2.png" alt="All endpoints - part 1" style="width:800px;height:650px;">
+<img src="/img/swagger3.png" alt="All endpoints- part 2" style="width:800px;height:650px;">
+<p>Let's receive a book by id:</p>
+<img src="/img/swagger4.png" alt="Example of work" style="width:353px;height:517px;">
+

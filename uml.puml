@@ -53,13 +53,6 @@ class OrderItem {
 - isDeleted : boolean
 }
 
-
-
-
-
-
-
-
 interface UserDetails
 interface GrantedAuthority
 
@@ -77,7 +70,6 @@ class Order {
 - orderItems : Set<OrderItem>
 - isDeleted : boolean
 }
-
 
 enum Status {
 PENDING
@@ -103,9 +95,11 @@ ShoppingCart ...> Order : create
 User "n" o- "n" Role
 UserDetails <|.. User
 GrantedAuthority <|.. Role
+
 note "org.springframework.security.core" as MyNote
 MyNote . GrantedAuthority
 UserDetails . MyNote
+
 Role <.. RoleName
 Order <. Status
 
