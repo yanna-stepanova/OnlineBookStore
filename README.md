@@ -117,5 +117,15 @@
 <img src="/img/swagger2.png" alt="All endpoints - part 1" style="width:800px;height:650px;">
 <img src="/img/swagger3.png" alt="All endpoints- part 2" style="width:800px;height:650px;">
 <p>Let's receive a book by id:</p>
-<img src="/img/swagger4.png" alt="Example of work" style="width:353px;height:517px;">
+<img src="/img/swagger4.png" alt="Example of work" style="width:600px;height:1000px;">
+<p>User with role "ROLE_USER" can't create or delete entities from DB. These operations can be executed by user with role "ROLE_ADMIN". But work with shopping cart and orders is available just for role "ROLE_USER". And this user can't see or interact with another user's entities.</p>
+<p>Another way to visualize a work of this application to use Postman:</p>
+<img src="/img/postman1.png" alt="Postman: all books" style="width:700px;height:850px;">
+<img src="/img/postman2.png" alt="Postman: find all books by author" style="width:700px;height:850px;">
+<img src="/img/postman4.png" alt="Postman: update book's information by admin" style="width:700px;height:650px;">
+<img src="/img/postman5.png" alt="Postman: update book's information by user(forbidden)" style="width:700px;height:500px;">
+<img src="/img/postman6.png" alt="Postman: get current shopping cart for admin(forbidden)" style="width:700px;height:450px;">
+<img src="/img/postman3.png" alt="Postman: get current shopping cart for user" style="width:700px;height:650px;">
+<img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:700px;height:800px;">
+<img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:700px;height:800px;">
 
