@@ -131,4 +131,4 @@
 <img src="/img/postman3.png" alt="Postman: get current shopping cart for user" style="width:500px;height:800px;">
 <img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:400px;height:800px;">
 <img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:400px;height:800px;">
-<p>This is a link on video where I show how my project works: <a href="url">https://www.loom.com/share/924739e31cac4f688a44af341d736af5?sid=2173f008-29ed-4f66-90ae-1b74cd4a0e6d</a></p>
+<p>This is a link on video where I show how my project works: <a href="url">https://www.loom.com/share/924739e31cac4f688a44af341d736af5?sid=506cde12-754f-4102-96fb-027d5b7662cf</a></p>
