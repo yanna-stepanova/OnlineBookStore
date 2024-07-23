@@ -1,5 +1,5 @@
 <h1 style="color: #5e9ca0;">A simple Online BookStore service.</h1>
-<p>Nowadays, it's very popular to use web services. That's why this project was built using MVC web infrastructure (Spring Web MVC).<br>There are implemented services for online book shopping. Book objects are stored in a MySQL database which was configured based on Liquibase scripts. and are accessed through Spring JPA. The Spring Web model-view-controller (MVC) layer allows access over the internet using RESTful API.</p>
+<p>Nowadays, it's very popular to use web services. That's why this project was built using MVC web infrastructure (Spring Web MVC).<br>There are implemented services for online book shopping. Book objects are stored in a MySQL database which was configured based on Liquibase scripts and are accessed through Spring JPA. The Spring Web model-view-controller (MVC) layer allows access over the internet using RESTful API.</p>
 <h3 style="color: #2e6c80;">The technologies and tools used:</h3>
 <table>
   <tbody>
