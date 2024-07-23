@@ -110,7 +110,7 @@
     <li><u>OrderController</u> can form new order just for users from their basket, can control order's status and give an information about all user's orders or certain order.</li>    
 </ul>
 <p>UML diagram of models was created using the plugin "PlantUml Integration":</p>
-<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:1000px;height:600px;">  
+<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:850px;height:430px;">  
 <p>Using Swagger UI we have the visual documentation that makes it easy for back-end implementation and client-side consumption.Type in your browser 'http://localhost:8080/api/swagger-ui/index.html', when this application is running. In the beginning, it is appeared an authentication window:</p>
 <img src="/img/auth.png" alt="Authentication window of the user" style="width:398px;height:315px;">  
 <p>After successful authentication you can see all endpoints of this application.</p>
@@ -120,7 +120,7 @@
 <img src="/img/swagger4.png" alt="Example of work" style="width:600px;height:1000px;">
 <p>User with role "ROLE_USER" can't create or delete entities from DB. These operations can be executed by user with role "ROLE_ADMIN". But work with shopping cart and orders is available just for role "ROLE_USER". And this user can't see or interact with another user's entities.</p>
 <p>Another way to visualize a work of this application to use Postman. There are a few examples of it:</p>
-<img src="/img/postman1.png" alt="Postman: all books" style="width:700px;height:850px;">
+<img src="/img/postman1.png" alt="Postman: all books" style="width:772px;height:378px;">
 <img src="/img/postman2.png" alt="Postman: find all books by author" style="width:700px;height:850px;">
 <img src="/img/postman4.png" alt="Postman: update book's information by admin" style="width:700px;height:650px;">
 <p>This is what will happen if the user tries to change the data in the book (this operation is allowed for the admin):</p>
