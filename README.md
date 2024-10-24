@@ -131,4 +131,6 @@
 <img src="/img/postman3.png" alt="Postman: get current shopping cart for user" style="width:500px;height:800px;">
 <img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:400px;height:800px;">
 <img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:400px;height:800px;">
+<p> Щоб запустити проект через докер спочатку треба виконати в терміналі команду "docker-compose build" - це створить зображення (image) "yana-book-store", де зображення "mysql" є загальне з Docker hub. Команда "docker-compose up" запускає у одночасно 2 контейнери: mysqldb-1,app-1. Тепер в Postman'і запрос буде оброблятися не черезпорт 8080, а порт 8081 (http://localhost:8081/api....)</p>
+<img src="/img/docker_container.png" alt="Docker" style="width:1779px;height:605px;">
 <p>This is a link on video where I show how my project works: <a href="https://www.loom.com/share/924739e31cac4f688a44af341d736af5?sid=506cde12-754f-4102-96fb-027d5b7662cf" target="_blank">OnlineBookStore</a></p>
