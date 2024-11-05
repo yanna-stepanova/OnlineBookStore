@@ -110,7 +110,7 @@
     <li><u>OrderController</u> can form new order just for users from their basket, can control order's status and give an information about all user's orders or certain order.</li>    
 </ul>
 <p>UML diagram of models was created using the plugin "PlantUml Integration":</p>
-<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:1350px;height:690px;">  
+<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:1350px;height:590px;">  
 <p>Using Swagger UI we have the visual documentation that makes it easy for back-end implementation and client-side consumption.Type in your browser 'http://localhost:8080/api/swagger-ui/index.html', when this application is running. In the beginning, it is appeared an authentication window:</p>
 <img src="/img/auth.png" alt="Authentication window of the user" style="width:398px;height:315px;">  
 <p>After successful authentication you can see all endpoints of this application.</p>
@@ -132,5 +132,5 @@
 <img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:600px;height:850px;">
 <img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:600px;height:850px;">
 <p> To run the project through Docker, you must first execute the command "docker-compose build" in the terminal - it will create the "yana-book-store" image, where the image "mysql"  is shared with Docker hub. The command "docker-compose up" starts running 2 containers at the same time in the docker: mysqldb-1, app-1. To rebuild the images and run them, you need to use the command "docker compose up --build". Now in Postman, the request will be processed not through port 8080, but through port 8081 (http://localhost:8081/api....)</p>
-<img src="/img/docker_container.png" alt="Docker" style="width:1779px;height:605px;">
+<img src="/img/docker_container.png" alt="Docker" style="width:1779px;height:555px;">
 <p>This is a link on video where I show how my project works: <a href="https://www.loom.com/share/924739e31cac4f688a44af341d736af5?sid=506cde12-754f-4102-96fb-027d5b7662cf" target="_blank">OnlineBookStore</a></p>
