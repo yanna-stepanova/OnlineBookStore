@@ -110,7 +110,7 @@
     <li><u>OrderController</u> can form new order just for users from their basket, can control order's status and give an information about all user's orders or certain order.</li>    
 </ul>
 <p>UML diagram of models was created using the plugin "PlantUml Integration":</p>
-<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:850px;height:430px;">  
+<img src="/img/uml-model.png" alt="Diagram of pattern MVC" style="width:1350px;height:690px;">  
 <p>Using Swagger UI we have the visual documentation that makes it easy for back-end implementation and client-side consumption.Type in your browser 'http://localhost:8080/api/swagger-ui/index.html', when this application is running. In the beginning, it is appeared an authentication window:</p>
 <img src="/img/auth.png" alt="Authentication window of the user" style="width:398px;height:315px;">  
 <p>After successful authentication you can see all endpoints of this application.</p>
@@ -120,17 +120,17 @@
 <img src="/img/swagger4.png" alt="Example of work" style="width:600px;height:1000px;">
 <p>User with role "ROLE_USER" can't create or delete entities from DB. These operations can be executed by user with role "ROLE_ADMIN". But work with shopping cart and orders is available just for role "ROLE_USER". And this user can't see or interact with another user's entities.</p>
 <p>Another way to visualize a work of this application to use Postman. There are a few examples of it:</p>
-<img src="/img/postman1.png" alt="Postman: all books" style="width:772px;height:378px;">
-<img src="/img/postman2.png" alt="Postman: find all books by author" style="width:700px;height:850px;">
-<img src="/img/postman4.png" alt="Postman: update book's information by admin" style="width:700px;height:650px;">
+<img src="/img/postman1.png" alt="Postman: all books" style="width:1150px;height:1000px;">
+<img src="/img/postman2.png" alt="Postman: find all books by author" style="width:900px;height:950px;">
+<img src="/img/postman4.png" alt="Postman: update book's information by admin" style="width:900px;height:750px;">
 <p>This is what will happen if the user tries to change the data in the book (this operation is allowed for the admin):</p>
-<img src="/img/postman5.png" alt="Postman: update book's information by user(forbidden)" style="width:700px;height:500px;">
+<img src="/img/postman5.png" alt="Postman: update book's information by user(forbidden)" style="width:900px;height:600px;">
 <p>The user 'admin' can't have own shopping cart: </p>
-<img src="/img/postman6.png" alt="Postman: get current shopping cart for admin(forbidden)" style="width:600px;height:580px;">
+<img src="/img/postman6.png" alt="Postman: get current shopping cart for admin(forbidden)" style="width:900px;height:780px;">
 <p>Here's a situation where the user 'alice' creates a new order from her shopping cart. And we can see that it appears in the list of all orders:</p>
-<img src="/img/postman3.png" alt="Postman: get current shopping cart for user" style="width:500px;height:800px;">
-<img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:400px;height:800px;">
-<img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:400px;height:800px;">
-<p> Щоб запустити проект через докер спочатку треба виконати в терміналі команду "docker-compose build" - це створить зображення (image) "yana-book-store", де зображення "mysql" є загальне з Docker hub. Команда "docker-compose up" запускає у одночасно 2 контейнери: mysqldb-1,app-1. Тепер в Postman'і запрос буде оброблятися не черезпорт 8080, а порт 8081 (http://localhost:8081/api....)</p>
+<img src="/img/postman3.png" alt="Postman: get current shopping cart for user" style="width:600px;height:850px;">
+<img src="/img/postman7.png" alt="Postman: create new user's order from current shopping cart" style="width:600px;height:850px;">
+<img src="/img/postman8.png" alt="Postman: get all orders for alice" style="width:600px;height:850px;">
+<p> To run the project through Docker, you must first execute the command "docker-compose build" in the terminal - it will create the "yana-book-store" image, where the image "mysql"  is shared with Docker hub. The command "docker-compose up" starts running 2 containers at the same time in the docker: mysqldb-1, app-1. To rebuild the images and run them, you need to use the command "docker compose up --build". Now in Postman, the request will be processed not through port 8080, but through port 8081 (http://localhost:8081/api....)</p>
 <img src="/img/docker_container.png" alt="Docker" style="width:1779px;height:605px;">
 <p>This is a link on video where I show how my project works: <a href="https://www.loom.com/share/924739e31cac4f688a44af341d736af5?sid=506cde12-754f-4102-96fb-027d5b7662cf" target="_blank">OnlineBookStore</a></p>
